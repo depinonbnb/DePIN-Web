@@ -1,0 +1,10 @@
+[
+  "function awardPoints(address _nodeAddress, uint256 _bandwidthMB) external",
+  "function batchAwardPoints(tuple(address nodeAddress, uint256 bandwidthMB, uint256 timestamp)[] _updates) external",
+  "function pointsBalance(address) external view returns (uint256)",
+  "function totalBandwidthShared(address) external view returns (uint256)",
+  "function totalPointsDistributed() external view returns (uint256)",
+  "function getNodeStats(address _nodeAddress) external view returns (uint256 points, uint256 bandwidthMB, uint256 bandwidthGB)",
+  "function getContractStats() external view returns (uint256 totalPoints, uint256 pointsRate, uint256 totalNodes)",
+  "event PointsAwarded(address indexed node, uint256 points, uint256 bandwidthMB)"
+]

@@ -1,0 +1,12 @@
+[
+  "function registerNode(string memory _nodeId) external payable",
+  "function increaseStake() external payable",
+  "function unstake() external",
+  "function isActiveNode(address _nodeAddress) external view returns (bool)",
+  "function getNode(address _nodeAddress) external view returns (address owner, uint256 stakedAmount, uint256 stakedAt, bool isActive, string memory nodeId)",
+  "function getTotalNodes() external view returns (uint256)",
+  "function totalStaked() external view returns (uint256)",
+  "function isRegisteredNode(address) external view returns (bool)",
+  "event NodeRegistered(address indexed nodeOwner, uint256 amount, string nodeId)",
+  "event NodeUnstaked(address indexed nodeOwner, uint256 amount)"
+]
