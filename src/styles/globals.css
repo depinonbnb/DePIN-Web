@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 16px;
+  --background: 210 11% 15%;
+  --foreground: 210 17% 98%;
+  --card: 210 9% 31%;
+  --card-foreground: 210 17% 98%;
+  --popover: 210 9% 31%;
+  --popover-foreground: 210 17% 98%;
+  --primary: 45 94% 47%;
+  --primary-foreground: 210 11% 15%;
+  --primary-hover: 45 92% 45%;
+  --secondary: 210 9% 31%;
+  --secondary-foreground: 210 17% 98%;
+  --muted: 210 9% 31%;
+  --muted-foreground: 210 8% 58%;
+  --accent: 158 78% 45%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 355 78% 63%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 210 9% 31%;
+  --input: 210 9% 31%;
+  --ring: 45 94% 47%;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --warning: 45 94% 47%;
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 210 11% 15%;
+  --foreground: 210 17% 98%;
+  --card: 210 9% 31%;
+  --card-foreground: 210 17% 98%;
+  --popover: 210 9% 31%;
+  --popover-foreground: 210 17% 98%;
+  --primary: 45 94% 47%;
+  --primary-foreground: 210 11% 15%;
+  --primary-hover: 45 92% 45%;
+  --secondary: 210 9% 31%;
+  --secondary-foreground: 210 17% 98%;
+  --muted: 210 9% 31%;
+  --muted-foreground: 210 8% 58%;
+  --accent: 158 78% 45%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 355 78% 63%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 210 9% 31%;
+  --input: 210 9% 31%;
+  --ring: 45 94% 47%;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --warning: 45 94% 47%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  }
+}
