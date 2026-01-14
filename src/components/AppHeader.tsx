@@ -1,0 +1,209 @@
+import { Link, useLocation } from 'react-router-dom';
+import { Globe, Wallet, Menu } from 'lucide-react';
+import { Button } from './ui/button';
+import { useWallet } from '../lib/wallet';
+import { useState } from 'react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu';
+import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+
+export function AppHeader() {
+  const location = useLocation();
+  const { address, isConnecting, connectWallet, disconnectWallet, changeWallet } = useWallet();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
+  const formatAddress = (addr: string) => {
+    return `${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}`;
+  };
+
+  const handleDisconnect = () => {
+    disconnectWallet();
+  };
+
+  const handleChangeWallet = async () => {
+    await changeWallet();
+  };
+
+  return (
+    <header className="w-full bg-[#181A20] border-b border-border">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-4 sm:gap-8">
+          <Link to="/" className="flex items-center gap-2">
+            <div className="w-8 h-8">
+              <img 
+                src="/assets/bnb-logo.ico" 
+                alt="BNB DePIN" 
+                className="w-full h-full object-contain drop-shadow-lg"
+                style={{ imageRendering: 'crisp-edges' }}
+              />
+            </div>
+            <span className="text-primary text-lg sm:text-xl font-semibold">BNB DePIN</span>
+          </Link>
+          
+          {/* Desktop Navigation */}
+          <nav className="hidden lg:flex items-center gap-6">
+            <Link 
+              to="/nodes" 
+              className={`transition-colors ${
+                isActive('/nodes') || isActive('/dashboard') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Nodes
+            </Link>
+            <Link 
+              to="/leaderboard" 
+              className={`transition-colors ${
+                isActive('/leaderboard') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Leaderboard
+            </Link>
+            <Link 
+              to="/register" 
+              className={`transition-colors ${
+                isActive('/register') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Register
+            </Link>
+            <Link 
+              to="/earn" 
+              className={`transition-colors ${
+                isActive('/earn') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Earn
+            </Link>
+            <Link 
+              to="/requirements" 
+              className={`transition-colors ${
+                isActive('/requirements') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Requirements
+            </Link>
+            <Link 
+              to="/how-it-works" 
+              className={`transition-colors ${
+                isActive('/how-it-works') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              How It Works
+            </Link>
+          </nav>
+        </div>
+
+        <div className="flex items-center gap-2 sm:gap-3">
+          {address ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size="sm" variant="outline" className="flex items-center gap-2">
+                  <Wallet className="w-4 h-4" />
+                  <span className="hidden sm:inline">{formatAddress(address)}</span>
+                  <span className="sm:hidden">Wallet</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-card border-border">
+                <DropdownMenuItem onClick={handleChangeWallet} className="cursor-pointer">
+                  Change Wallet
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleDisconnect} className="cursor-pointer text-destructive">
+                  Disconnect
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button 
+              size="sm" 
+              onClick={connectWallet} 
+              disabled={isConnecting}
+              className="flex items-center gap-2"
+            >
+              <Wallet className="w-4 h-4" />
+              <span className="hidden sm:inline">{isConnecting ? 'Connecting...' : 'Connect'}</span>
+            </Button>
+          )}
+          <button className="hidden sm:block text-muted-foreground hover:text-foreground transition-colors">
+            <Globe className="w-5 h-5" />
+          </button>
+
+          {/* Mobile Menu */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <button className="lg:hidden text-foreground">
+                <Menu className="w-6 h-6" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="bg-card border-border w-[280px] sm:w-[350px]">
+              <nav className="flex flex-col gap-4 mt-8">
+                <Link 
+                  to="/nodes" 
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`px-4 py-3 rounded-lg transition-colors ${
+                    isActive('/nodes') || isActive('/dashboard') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                  }`}
+                >
+                  Nodes
+                </Link>
+                <Link 
+                  to="/leaderboard"
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className={`px-4 py-3 rounded-lg transition-colors ${
+                    isActive('/leaderboard') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                  }`}
+                >
+                  Leaderboard
+                </Link>
+                <Link 
+                  to="/register"
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className={`px-4 py-3 rounded-lg transition-colors ${
+                    isActive('/register') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                  }`}
+                >
+                  Register
+                </Link>
+                <Link 
+                  to="/earn"
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className={`px-4 py-3 rounded-lg transition-colors ${
+                    isActive('/earn') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                  }`}
+                >
+                  Earn
+                </Link>
+                <Link 
+                  to="/requirements"
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className={`px-4 py-3 rounded-lg transition-colors ${
+                    isActive('/requirements') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                  }`}
+                >
+                  Requirements
+                </Link>
+                <Link 
+                  to="/how-it-works"
+                  onClick={() => setMobileMenuOpen(false)} 
+                  className={`px-4 py-3 rounded-lg transition-colors ${
+                    isActive('/how-it-works') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                  }`}
+                >
+                  How It Works
+                </Link>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </header>
+  );
+}
+
