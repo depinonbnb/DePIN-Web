@@ -33,33 +33,32 @@ export function AppHeader() {
   const [currentLang, setCurrentLang] = useState('en');
 
   const changeLanguage = (langCode: string) => {
-    setCurrentLang(langCode);
+    // Clear all possible googtrans cookies first
+    const clearCookies = () => {
+      const domains = ['', window.location.hostname, '.' + window.location.hostname];
+      const paths = ['/', ''];
+      domains.forEach(domain => {
+        paths.forEach(path => {
+          const domainPart = domain ? `; domain=${domain}` : '';
+          const pathPart = path ? `; path=${path}` : '';
+          document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC${pathPart}${domainPart}`;
+        });
+      });
+    };
 
     // Set cookie for Google Translate
     const setCookie = (lang: string) => {
-      document.cookie = `googtrans=/en/${lang}; path=/`;
-      document.cookie = `googtrans=/en/${lang}; path=/; domain=${window.location.hostname}`;
+      clearCookies();
+      if (lang !== 'en') {
+        document.cookie = `googtrans=/en/${lang}; path=/`;
+      }
     };
 
-    if (langCode === 'en') {
-      // Reset to English - clear cookies and reload
-      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname}`;
-      window.location.reload();
-      return;
-    }
-
+    setCurrentLang(langCode);
     setCookie(langCode);
 
-    // Try using the Google Translate API directly
-    const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
-    if (select) {
-      select.value = langCode;
-      select.dispatchEvent(new Event('change'));
-    } else {
-      // If widget not loaded, reload page with cookie set
-      window.location.reload();
-    }
+    // Always reload to apply changes properly
+    window.location.reload();
   };
 
   useEffect(() => {
