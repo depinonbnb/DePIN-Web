@@ -1,8 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Globe, Wallet, Menu } from 'lucide-react';
+import { Globe, Wallet, Menu, Check } from 'lucide-react';
 import { Button } from './ui/button';
 import { useWallet } from '../lib/wallet';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,10 +11,75 @@ import {
 } from './ui/dropdown-menu';
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 
+const LANGUAGES = [
+  { code: 'en', name: 'English', flag: '🇺🇸' },
+  { code: 'zh-CN', name: '中文', flag: '🇨🇳' },
+  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'ko', name: '한국어', flag: '🇰🇷' },
+  { code: 'ru', name: 'Русский', flag: '🇷🇺' },
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'pt', name: 'Português', flag: '🇧🇷' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+  { code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
+];
+
 export function AppHeader() {
   const location = useLocation();
   const { address, isConnecting, connectWallet, disconnectWallet, changeWallet } = useWallet();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState('en');
+
+  const changeLanguage = (langCode: string) => {
+    setCurrentLang(langCode);
+
+    // Set cookie for Google Translate
+    const setCookie = (lang: string) => {
+      document.cookie = `googtrans=/en/${lang}; path=/`;
+      document.cookie = `googtrans=/en/${lang}; path=/; domain=${window.location.hostname}`;
+    };
+
+    if (langCode === 'en') {
+      // Reset to English - clear cookies and reload
+      document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${window.location.hostname}`;
+      window.location.reload();
+      return;
+    }
+
+    setCookie(langCode);
+
+    // Try using the Google Translate API directly
+    const select = document.querySelector('.goog-te-combo') as HTMLSelectElement;
+    if (select) {
+      select.value = langCode;
+      select.dispatchEvent(new Event('change'));
+    } else {
+      // If widget not loaded, reload page with cookie set
+      window.location.reload();
+    }
+  };
+
+  useEffect(() => {
+    // Check if already translated from cookie
+    const getCookie = (name: string) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop()?.split(';').shift();
+      return null;
+    };
+
+    const googtrans = getCookie('googtrans');
+    if (googtrans) {
+      // Cookie format is /en/langcode
+      const lang = googtrans.split('/').pop();
+      if (lang && lang !== currentLang) {
+        setCurrentLang(lang);
+      }
+    }
+  }, []);
 
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -131,9 +196,30 @@ export function AppHeader() {
               <span className="hidden sm:inline">{isConnecting ? 'Connecting...' : 'Connect'}</span>
             </Button>
           )}
-          <button className="hidden sm:block text-muted-foreground hover:text-foreground transition-colors">
-            <Globe className="w-5 h-5" />
-          </button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="hidden sm:flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors">
+                <Globe className="w-5 h-5" />
+                <span className="text-sm">{LANGUAGES.find(l => l.code === currentLang)?.flag || '🌐'}</span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="bg-card border-border min-w-[180px]">
+              {LANGUAGES.map((lang) => (
+                <DropdownMenuItem
+                  key={lang.code}
+                  onClick={() => changeLanguage(lang.code)}
+                  className="cursor-pointer flex items-center justify-between"
+                >
+                  <span className="flex items-center gap-2">
+                    <span>{lang.flag}</span>
+                    <span>{lang.name}</span>
+                  </span>
+                  {currentLang === lang.code && <Check className="w-4 h-4 text-primary" />}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div id="google_translate_element" className="hidden"></div>
 
           {/* Mobile Menu */}
           <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>

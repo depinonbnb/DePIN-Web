@@ -68,3 +68,26 @@
     font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   }
 }
+
+/* Google Translate - Hide the widget, we use custom UI */
+#google_translate_element {
+  position: absolute;
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+}
+
+.goog-te-banner-frame.skiptranslate,
+.goog-te-gadget-icon,
+#goog-gt-tt,
+.goog-te-balloon-frame {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+.skiptranslate {
+  display: none !important;
+}
