@@ -1,0 +1,38 @@
+# Default: treat as text, normalize to LF in the repo.
+# Working tree gets LF on checkout regardless of OS (this is a Vite project — Node/Vite handle LF everywhere).
+* text=auto eol=lf
+
+# Explicit text files (belt-and-suspenders for files git might guess as binary).
+*.ts        text eol=lf
+*.tsx       text eol=lf
+*.js        text eol=lf
+*.jsx       text eol=lf
+*.mjs       text eol=lf
+*.cjs       text eol=lf
+*.json      text eol=lf
+*.css       text eol=lf
+*.scss      text eol=lf
+*.html      text eol=lf
+*.md        text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.toml      text eol=lf
+*.sh        text eol=lf
+*.svg       text eol=lf
+
+# Binaries — never touch line endings.
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.webp      binary
+*.ico       binary
+*.woff      binary
+*.woff2     binary
+*.ttf       binary
+*.otf       binary
+*.eot       binary
+*.pdf       binary
+
+# Lockfiles — text but generated; mark as such so diffs collapse in PR UIs.
+package-lock.json linguist-generated=true text eol=lf
