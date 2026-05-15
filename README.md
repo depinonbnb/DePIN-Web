@@ -11,7 +11,6 @@ The companion backend lives at [../DePINonBNB/](../DePINonBNB/).
 - Tailwind CSS 3 + Radix UI primitives
 - ethers.js 6 (BSC Testnet, chain ID 97)
 - React Router 6
-- Recharts (bandwidth charts)
 - Deployed on Vercel
 
 ## Quick start
@@ -28,29 +27,29 @@ Configured at build time via Vite env vars (prefix `VITE_`). Defaults are wired 
 
 | Variable | Default | Purpose |
 |---|---|---|
-| `VITE_API_URL` | `http://localhost:3001/api` | Backend API base URL (DePINonBNB) |
-| `VITE_STAKING_CONTRACT_ADDRESS` | `0x27bBD…3a86f` | DePIN staking contract |
-| `VITE_POINTS_CONTRACT_ADDRESS` | `0x04F8…0e6e` | DePIN points contract |
-| `VITE_NETWORK_ID` | `97` | BSC Testnet |
+| `VITE_API_URL` | `http://localhost:3000/api` | backend api base url (depinonbnb) |
+| `VITE_STAKING_CONTRACT_ADDRESS` | `0x27bBD…3a86f` | depin staking contract |
+| `VITE_POINTS_CONTRACT_ADDRESS` | `0x04F8…0e6e` | depin points contract |
+| `VITE_NETWORK_ID` | `97` | bsc testnet |
 
-The backend is expected to listen on `:3001`. The Vite dev server runs on `:3002`.
+backend listens on `:3000`. vite dev server runs on `:3002`. set `CORS_ALLOWED_ORIGINS=http://localhost:3002,http://127.0.0.1:3002` on the backend.
 
 ## Layout
 
 ```
 src/
-  pages/          route-level views (Home, Dashboard, Register, Earn, Nodes, …)
-  components/     feature components + ui/ Radix primitives
+  pages/          route-level views (home, dashboard, register, earn, nodes, …)
+  components/     feature components + ui/ radix primitives
   lib/
-    wallet.tsx    MetaMask context, connect/disconnect, chain switching
-    contracts.ts  ethers.js contract wrappers + BSC Testnet config
-    api.ts        backend fetch client (with mock-data fallback)
-  contracts/      ABIs (DePINStaking.json, DePINPoints.json)
-  styles/         globals.css (Tailwind + theme variables)
+    wallet.tsx    metamask context, connect/disconnect, chain switching
+    contracts.ts  ethers.js contract wrappers + bsc testnet config
+    api.ts        backend fetch client with mock-data fallback
+  contracts/      abis (depinstaking.json, depinpoints.json)
+  styles/         globals.css (tailwind + theme variables)
 docs/
   SPEC.md         architecture and contracts
   adr/            architecture decision records
-tests/            (placeholder — no runner wired yet)
+tests/            placeholder — no runner wired yet
 ```
 
 ## Documentation
@@ -60,4 +59,4 @@ tests/            (placeholder — no runner wired yet)
 
 ## Status
 
-Beta. Core flows (wallet connect, node register, leaderboard, dashboard) work against BSC Testnet. Several areas are stubbed — see [docs/SPEC.md](docs/SPEC.md) "Known gaps".
+beta. core flows (wallet connect, node register, leaderboard, dashboard) work against bsc testnet. several areas are stubbed — see [docs/SPEC.md](docs/SPEC.md) "known gaps".
