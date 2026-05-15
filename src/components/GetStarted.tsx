@@ -1,30 +1,30 @@
-import { UserPlus, Shield, Network, TrendingUp } from 'lucide-react';
+import { UserPlus, Server, Download, TrendingUp } from 'lucide-react';
 
 export function GetStarted() {
   const steps = [
     {
       number: 1,
       icon: UserPlus,
-      title: 'Register & Verify Account',
-      description: 'Register your account and complete the individual or entity verification, which is required to comply with local regulation.',
+      title: 'Register Your Node',
+      description: 'Connect your wallet and register your node type (BSC Full, BSC Archive, BSC Fast, opBNB Full, or opBNB Fast). Sign the registration with your wallet.',
     },
     {
       number: 2,
-      icon: Shield,
-      title: 'Secure Your Node',
-      description: 'Set up your infrastructure with proper security measures and configure your bandwidth allocation.',
+      icon: Server,
+      title: 'Run Your BNB Node',
+      description: 'Set up and run a BSC or opBNB node on your machine. Choose from full nodes, archive nodes, or lightweight fast nodes based on your hardware.',
     },
     {
       number: 3,
-      icon: Network,
-      title: 'Join the Network',
-      description: 'Connect to the DePIN network and start contributing your computational resources to earn rewards.',
+      icon: Download,
+      title: 'Download Prover CLI',
+      description: 'Install the prover software that connects to your local node. It automatically handles verification requests and submits signed responses.',
     },
     {
       number: 4,
       icon: TrendingUp,
-      title: 'Track & Earn',
-      description: 'Monitor your node performance, track your contributions, and watch your earnings grow over time.',
+      title: 'Prove & Earn',
+      description: 'Your prover automatically verifies your node ownership by answering blockchain queries. Earn points based on successful verifications and uptime.',
     },
   ];
 

@@ -6,4 +6,7 @@ dist
 *.log
 .vscode
 .claude
+.claude-flow
 .vercel
+SECURITY_REPORT.json
+nul

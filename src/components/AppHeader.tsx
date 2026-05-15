@@ -60,13 +60,22 @@ export function AppHeader() {
 
     clearAllCookies();
 
+    // Set the new language cookie for both root and current domain
     if (langCode !== 'en') {
-      // Set new cookie
+      const hostname = window.location.hostname;
+      // Set cookie for root path
       document.cookie = `googtrans=/en/${langCode}; path=/`;
+      // Also set for the domain specifically
+      document.cookie = `googtrans=/en/${langCode}; path=/; domain=${hostname}`;
+      // And with leading dot for subdomains
+      if (hostname.includes('.')) {
+        const rootDomain = hostname.split('.').slice(-2).join('.');
+        document.cookie = `googtrans=/en/${langCode}; path=/; domain=.${rootDomain}`;
+      }
     }
 
-    // Force reload
-    window.location.href = window.location.pathname;
+    // Force a full page reload (not just navigation)
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -74,15 +83,28 @@ export function AppHeader() {
     const savedLang = localStorage.getItem('selectedLang') || 'en';
     setCurrentLang(savedLang);
 
+    const hostname = window.location.hostname;
+    const rootDomain = hostname.includes('.') ? hostname.split('.').slice(-2).join('.') : hostname;
+
     // If English selected but page is translated, clear and reload
     if (savedLang === 'en') {
       const html = document.documentElement;
       if (html.classList.contains('translated-ltr') || html.classList.contains('translated-rtl')) {
         // Page is still translated, clear cookies
-        const hostname = window.location.hostname;
         document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`;
         document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=${hostname}`;
-        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${hostname}`;
+        document.cookie = `googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.${rootDomain}`;
+        window.location.reload();
+      }
+    } else {
+      // Non-English language selected, ensure cookie is set correctly
+      const currentCookie = document.cookie;
+      const expectedValue = `/en/${savedLang}`;
+      if (!currentCookie.includes(`googtrans=${expectedValue}`)) {
+        // Cookie doesn't match, set it correctly
+        document.cookie = `googtrans=${expectedValue}; path=/`;
+        document.cookie = `googtrans=${expectedValue}; path=/; domain=${hostname}`;
+        document.cookie = `googtrans=${expectedValue}; path=/; domain=.${rootDomain}`;
       }
     }
   }, []);
@@ -121,53 +143,47 @@ export function AppHeader() {
           
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-6">
-            <Link 
-              to="/nodes" 
+            <Link
+              to="/how-it-works"
+              className={`transition-colors ${
+                isActive('/how-it-works') || isActive('/requirements') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Guide
+            </Link>
+            <Link
+              to="/nodes"
               className={`transition-colors ${
                 isActive('/nodes') || isActive('/dashboard') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Nodes
             </Link>
-            <Link 
-              to="/leaderboard" 
+            <Link
+              to="/leaderboard"
               className={`transition-colors ${
                 isActive('/leaderboard') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Leaderboard
             </Link>
-            <Link 
-              to="/register" 
-              className={`transition-colors ${
-                isActive('/register') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              Register
-            </Link>
-            <Link 
-              to="/earn" 
+            <Link
+              to="/earn"
               className={`transition-colors ${
                 isActive('/earn') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Earn
             </Link>
-            <Link 
-              to="/requirements" 
-              className={`transition-colors ${
-                isActive('/requirements') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+            <Link
+              to="/register"
+              className={`px-4 py-1.5 rounded-md transition-colors ${
+                isActive('/register')
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground'
               }`}
             >
-              Requirements
-            </Link>
-            <Link 
-              to="/how-it-works" 
-              className={`transition-colors ${
-                isActive('/how-it-works') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              How It Works
+              Register
             </Link>
           </nav>
         </div>
@@ -236,8 +252,17 @@ export function AppHeader() {
             </SheetTrigger>
             <SheetContent side="right" className="bg-card border-border w-[280px] sm:w-[350px]">
               <nav className="flex flex-col gap-4 mt-8">
-                <Link 
-                  to="/nodes" 
+                <Link
+                  to="/how-it-works"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`px-4 py-3 rounded-lg transition-colors ${
+                    isActive('/how-it-works') || isActive('/requirements') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                  }`}
+                >
+                  Guide
+                </Link>
+                <Link
+                  to="/nodes"
                   onClick={() => setMobileMenuOpen(false)}
                   className={`px-4 py-3 rounded-lg transition-colors ${
                     isActive('/nodes') || isActive('/dashboard') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
@@ -245,50 +270,32 @@ export function AppHeader() {
                 >
                   Nodes
                 </Link>
-                <Link 
+                <Link
                   to="/leaderboard"
-                  onClick={() => setMobileMenuOpen(false)} 
+                  onClick={() => setMobileMenuOpen(false)}
                   className={`px-4 py-3 rounded-lg transition-colors ${
                     isActive('/leaderboard') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
                   }`}
                 >
                   Leaderboard
                 </Link>
-                <Link 
-                  to="/register"
-                  onClick={() => setMobileMenuOpen(false)} 
-                  className={`px-4 py-3 rounded-lg transition-colors ${
-                    isActive('/register') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
-                  }`}
-                >
-                  Register
-                </Link>
-                <Link 
+                <Link
                   to="/earn"
-                  onClick={() => setMobileMenuOpen(false)} 
+                  onClick={() => setMobileMenuOpen(false)}
                   className={`px-4 py-3 rounded-lg transition-colors ${
                     isActive('/earn') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
                   }`}
                 >
                   Earn
                 </Link>
-                <Link 
-                  to="/requirements"
-                  onClick={() => setMobileMenuOpen(false)} 
+                <Link
+                  to="/register"
+                  onClick={() => setMobileMenuOpen(false)}
                   className={`px-4 py-3 rounded-lg transition-colors ${
-                    isActive('/requirements') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                    isActive('/register') ? 'bg-primary text-primary-foreground' : 'bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground'
                   }`}
                 >
-                  Requirements
-                </Link>
-                <Link 
-                  to="/how-it-works"
-                  onClick={() => setMobileMenuOpen(false)} 
-                  className={`px-4 py-3 rounded-lg transition-colors ${
-                    isActive('/how-it-works') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
-                  }`}
-                >
-                  How It Works
+                  Register
                 </Link>
               </nav>
             </SheetContent>

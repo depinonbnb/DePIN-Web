@@ -1,5 +1,5 @@
 import { Card } from '../components/ui/card';
-import { Cpu, HardDrive, Wifi, Monitor, Download, ExternalLink, CheckCircle } from 'lucide-react';
+import { Cpu, HardDrive, Wifi, Monitor, Download, ExternalLink, Server, Database } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
 export function Requirements() {
@@ -10,147 +10,354 @@ export function Requirements() {
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-2">System Requirements</h1>
           <p className="text-muted-foreground">
-            Everything you need to know to run a BNB DePIN node and contribute to the network.
+            Hardware requirements for running BNB Chain nodes. Choose a node type based on your available resources.
           </p>
         </div>
 
-        {/* Node Types */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* BSC RPC Node Requirements */}
-          <Card className="bg-card border-border p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <Monitor className="w-6 h-6 text-primary" />
+        {/* BSC Node Types */}
+        <h2 className="text-2xl font-bold text-foreground mb-4">BSC Node Types</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* BSC Archive Node */}
+          <Card className="bg-card border-border p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Database className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-foreground">BSC RPC Node</h2>
-                <p className="text-sm text-muted-foreground">Lightweight node option</p>
+                <h3 className="text-xl font-bold text-foreground">BSC Archive</h3>
+                <p className="text-xs text-primary">Highest Rewards</p>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <Cpu className="w-5 h-5 text-primary mt-1 shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground">CPU</p>
-                  <p className="text-sm text-muted-foreground">4+ cores recommended</p>
-                </div>
-              </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Full historical state data. Can answer queries about any block in history.
+            </p>
 
-              <div className="flex items-start gap-3">
-                <HardDrive className="w-5 h-5 text-primary mt-1 shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground">RAM</p>
-                  <p className="text-sm text-muted-foreground">8GB minimum (16GB recommended)</p>
-                </div>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center gap-2">
+                <Cpu className="w-4 h-4 text-primary" />
+                <span className="text-foreground">8+ cores (high performance)</span>
               </div>
-
-              <div className="flex items-start gap-3">
-                <HardDrive className="w-5 h-5 text-primary mt-1 shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground">Storage</p>
-                  <p className="text-sm text-muted-foreground">500GB+ SSD</p>
-                </div>
+              <div className="flex items-center gap-2">
+                <HardDrive className="w-4 h-4 text-primary" />
+                <span className="text-foreground">32GB+ RAM</span>
               </div>
-
-              <div className="flex items-start gap-3">
-                <Wifi className="w-5 h-5 text-primary mt-1 shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground">Internet</p>
-                  <p className="text-sm text-muted-foreground">Stable, 25+ Mbps up/down</p>
-                </div>
+              <div className="flex items-center gap-2">
+                <HardDrive className="w-4 h-4 text-primary" />
+                <span className="text-foreground">4TB+ NVMe SSD</span>
               </div>
-
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-primary mt-1 shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground">Operating System</p>
-                  <p className="text-sm text-muted-foreground">Windows, macOS, or Linux</p>
-                </div>
+              <div className="flex items-center gap-2">
+                <Wifi className="w-4 h-4 text-primary" />
+                <span className="text-foreground">100+ Mbps</span>
               </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-border">
-              <p className="text-sm text-accent mb-2">Perfect for:</p>
-              <p className="text-sm text-muted-foreground">Home PCs, mid-range gaming PCs</p>
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Registration</span>
+                <span className="text-primary font-bold">100 pts</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Uptime</span>
+                <span className="text-primary font-bold">10 pts/hr</span>
+              </div>
             </div>
           </Card>
 
-          {/* Full BSC Node Requirements */}
-          <Card className="bg-card border-border p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
-                <HardDrive className="w-6 h-6 text-accent" />
+          {/* BSC Full Node */}
+          <Card className="bg-card border-border p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Server className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-foreground">BSC Full Node</h2>
-                <p className="text-sm text-muted-foreground">Complete blockchain validation</p>
+                <h3 className="text-xl font-bold text-foreground">BSC Full</h3>
+                <p className="text-xs text-muted-foreground">Standard Option</p>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <Cpu className="w-5 h-5 text-accent mt-1 shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground">CPU</p>
-                  <p className="text-sm text-muted-foreground">8+ cores (High performance)</p>
-                </div>
-              </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Complete blockchain validation. Validates all transactions and blocks.
+            </p>
 
-              <div className="flex items-start gap-3">
-                <HardDrive className="w-5 h-5 text-accent mt-1 shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground">RAM</p>
-                  <p className="text-sm text-muted-foreground">16GB+ (32GB recommended)</p>
-                </div>
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center gap-2">
+                <Cpu className="w-4 h-4 text-primary" />
+                <span className="text-foreground">8+ cores</span>
               </div>
-
-              <div className="flex items-start gap-3">
-                <HardDrive className="w-5 h-5 text-accent mt-1 shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground">Storage</p>
-                  <p className="text-sm text-muted-foreground">2TB+ fast SSD (NVMe preferred)</p>
-                </div>
+              <div className="flex items-center gap-2">
+                <HardDrive className="w-4 h-4 text-primary" />
+                <span className="text-foreground">16GB+ RAM (32GB recommended)</span>
               </div>
-
-              <div className="flex items-start gap-3">
-                <Wifi className="w-5 h-5 text-accent mt-1 shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground">Internet</p>
-                  <p className="text-sm text-muted-foreground">Reliable, 100+ Mbps recommended</p>
-                </div>
+              <div className="flex items-center gap-2">
+                <HardDrive className="w-4 h-4 text-primary" />
+                <span className="text-foreground">2TB+ SSD</span>
               </div>
-
-              <div className="flex items-start gap-3">
-                <CheckCircle className="w-5 h-5 text-accent mt-1 shrink-0" />
-                <div>
-                  <p className="font-medium text-foreground">Operating System</p>
-                  <p className="text-sm text-muted-foreground">Linux preferred (Windows/macOS works)</p>
-                </div>
+              <div className="flex items-center gap-2">
+                <Wifi className="w-4 h-4 text-primary" />
+                <span className="text-foreground">100+ Mbps</span>
               </div>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-border">
-              <p className="text-sm text-accent mb-2">Perfect for:</p>
-              <p className="text-sm text-muted-foreground">High-end gaming PCs, dedicated servers</p>
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Registration</span>
+                <span className="text-primary font-bold">50 pts</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Uptime</span>
+                <span className="text-primary font-bold">6 pts/hr</span>
+              </div>
+            </div>
+          </Card>
+
+          {/* BSC Fast Node */}
+          <Card className="bg-card border-border p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <Monitor className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-foreground">BSC Fast</h3>
+                <p className="text-xs text-muted-foreground">Entry Level</p>
+              </div>
+            </div>
+
+            <p className="text-sm text-muted-foreground mb-4">
+              Lightweight node. Lower resource requirements, basic verifications only.
+            </p>
+
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center gap-2">
+                <Cpu className="w-4 h-4 text-primary" />
+                <span className="text-foreground">4+ cores</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <HardDrive className="w-4 h-4 text-primary" />
+                <span className="text-foreground">8GB+ RAM (16GB recommended)</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <HardDrive className="w-4 h-4 text-primary" />
+                <span className="text-foreground">500GB+ SSD</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Wifi className="w-4 h-4 text-primary" />
+                <span className="text-foreground">25+ Mbps</span>
+              </div>
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Registration</span>
+                <span className="text-primary font-bold">40 pts</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Uptime</span>
+                <span className="text-primary font-bold">4 pts/hr</span>
+              </div>
             </div>
           </Card>
         </div>
 
+        {/* opBNB Node Types */}
+        <h2 className="text-2xl font-bold text-foreground mb-4">opBNB Node Types (Layer 2)</h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {/* opBNB Full Node */}
+          <Card className="bg-card border-border p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
+                <Server className="w-5 h-5 text-accent" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-foreground">opBNB Full</h3>
+                <p className="text-xs text-muted-foreground">L2 Full Node</p>
+              </div>
+            </div>
+
+            <p className="text-sm text-muted-foreground mb-4">
+              Complete opBNB Layer 2 validation. Lower requirements than BSC L1.
+            </p>
+
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center gap-2">
+                <Cpu className="w-4 h-4 text-accent" />
+                <span className="text-foreground">4+ cores</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <HardDrive className="w-4 h-4 text-accent" />
+                <span className="text-foreground">16GB+ RAM</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <HardDrive className="w-4 h-4 text-accent" />
+                <span className="text-foreground">1TB+ SSD</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Wifi className="w-4 h-4 text-accent" />
+                <span className="text-foreground">50+ Mbps</span>
+              </div>
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Registration</span>
+                <span className="text-accent font-bold">40 pts</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Uptime</span>
+                <span className="text-accent font-bold">4 pts/hr</span>
+              </div>
+            </div>
+          </Card>
+
+          {/* opBNB Fast Node */}
+          <Card className="bg-card border-border p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
+                <Monitor className="w-5 h-5 text-accent" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-foreground">opBNB Fast</h3>
+                <p className="text-xs text-muted-foreground">L2 Entry Level</p>
+              </div>
+            </div>
+
+            <p className="text-sm text-muted-foreground mb-4">
+              Lightweight L2 node. Easiest entry point for opBNB participation.
+            </p>
+
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center gap-2">
+                <Cpu className="w-4 h-4 text-accent" />
+                <span className="text-foreground">4+ cores</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <HardDrive className="w-4 h-4 text-accent" />
+                <span className="text-foreground">8GB+ RAM</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <HardDrive className="w-4 h-4 text-accent" />
+                <span className="text-foreground">500GB+ SSD</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Wifi className="w-4 h-4 text-accent" />
+                <span className="text-foreground">25+ Mbps</span>
+              </div>
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Registration</span>
+                <span className="text-accent font-bold">30 pts</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Uptime</span>
+                <span className="text-accent font-bold">3 pts/hr</span>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+        {/* Verification Types */}
+        <Card className="bg-card border-border p-8 mb-8">
+          <h2 className="text-2xl font-bold text-foreground mb-6">Verification Types by Node</h2>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border">
+                  <th className="text-left py-3 px-4 text-muted-foreground font-medium">Node Type</th>
+                  <th className="text-center py-3 px-4 text-muted-foreground font-medium">Block Hash</th>
+                  <th className="text-center py-3 px-4 text-muted-foreground font-medium">Block Data</th>
+                  <th className="text-center py-3 px-4 text-muted-foreground font-medium">State Balance</th>
+                  <th className="text-center py-3 px-4 text-muted-foreground font-medium">Sync Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-border/50">
+                  <td className="py-3 px-4 text-foreground">BSC Archive</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                </tr>
+                <tr className="border-b border-border/50">
+                  <td className="py-3 px-4 text-foreground">BSC Full</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                  <td className="py-3 px-4 text-center text-muted-foreground">No</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                </tr>
+                <tr className="border-b border-border/50">
+                  <td className="py-3 px-4 text-foreground">BSC Fast</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                  <td className="py-3 px-4 text-center text-muted-foreground">No</td>
+                  <td className="py-3 px-4 text-center text-muted-foreground">No</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                </tr>
+                <tr className="border-b border-border/50">
+                  <td className="py-3 px-4 text-foreground">opBNB Full</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                  <td className="py-3 px-4 text-center text-muted-foreground">No</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                </tr>
+                <tr>
+                  <td className="py-3 px-4 text-foreground">opBNB Fast</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                  <td className="py-3 px-4 text-center text-muted-foreground">No</td>
+                  <td className="py-3 px-4 text-center text-muted-foreground">No</td>
+                  <td className="py-3 px-4 text-center text-accent">Yes</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p className="text-sm text-muted-foreground mt-4">
+            Archive nodes receive harder verifications (historical state queries) but earn higher rewards.
+          </p>
+        </Card>
+
         {/* Getting Started */}
         <Card className="bg-card border-border p-8 mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Getting Started with DePIN Node</h2>
-          
+          <h2 className="text-2xl font-bold text-foreground mb-6">Getting Started</h2>
+
           <div className="space-y-6">
             <div className="flex items-start gap-4">
               <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
                 <span className="text-primary font-bold">1</span>
               </div>
               <div className="flex-1">
+                <h3 className="text-lg font-semibold text-foreground mb-2">Set Up Your Node</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Download and run BSC or opBNB node software. Wait for full sync before registering.
+                </p>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" asChild>
+                    <a href="https://github.com/bnb-chain/bsc" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+                      <Download className="w-4 h-4" />
+                      BSC Node
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </Button>
+                  <Button size="sm" variant="outline" asChild>
+                    <a href="https://github.com/bnb-chain/opbnb" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+                      <Download className="w-4 h-4" />
+                      opBNB Node
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-4">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                <span className="text-primary font-bold">2</span>
+              </div>
+              <div className="flex-1">
                 <h3 className="text-lg font-semibold text-foreground mb-2">Register Your Node</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Connect your MetaMask wallet and register your node on the BNB Smart Chain testnet. 
-                  You'll need to stake 0.1 BNB to activate your node.
+                  Connect your wallet and register your node type. Sign the registration message to prove ownership.
                 </p>
                 <Button size="sm" asChild>
                   <a href="/register">Register Node</a>
@@ -160,102 +367,68 @@ export function Requirements() {
 
             <div className="flex items-start gap-4">
               <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                <span className="text-primary font-bold">2</span>
+                <span className="text-primary font-bold">3</span>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-foreground mb-2">Download BSC Node Software</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2">Download & Run Prover CLI</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Download the official BSC node software from the BNB Smart Chain GitHub repository. 
-                  Follow the setup instructions to sync and run your node.
+                  Install the prover software and configure it with your node's RPC endpoint. It handles verifications automatically.
                 </p>
-                <Button size="sm" variant="outline" asChild>
-                  <a href="https://github.com/bnb-chain/bsc" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
-                    <Download className="w-4 h-4" />
-                    Official BSC GitHub
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
-                </Button>
+                <div className="flex gap-2 flex-wrap">
+                  <Button size="sm" variant="outline" disabled>
+                    <Download className="w-4 h-4 mr-2" />
+                    Windows (Coming Soon)
+                  </Button>
+                  <Button size="sm" variant="outline" disabled>
+                    <Download className="w-4 h-4 mr-2" />
+                    macOS (Coming Soon)
+                  </Button>
+                  <Button size="sm" variant="outline" disabled>
+                    <Download className="w-4 h-4 mr-2" />
+                    Linux (Coming Soon)
+                  </Button>
+                </div>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
               <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                <span className="text-primary font-bold">3</span>
+                <span className="text-primary font-bold">4</span>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-foreground mb-2">Run & Earn</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2">Prove & Earn</h3>
                 <p className="text-sm text-muted-foreground">
-                  Install and run the node software. Your bandwidth contributions will be tracked automatically, 
-                  and you'll earn points based on your usage. Points translate to BNB rewards from vault fees!
+                  Your prover runs in the background, answering verification requests every 5 minutes.
+                  Earn points for successful verifications and uptime. Track your progress on the dashboard.
                 </p>
               </div>
             </div>
           </div>
         </Card>
 
-        {/* BSC Full Node Setup */}
-        <Card className="bg-card border-border p-8">
-          <h2 className="text-2xl font-bold text-foreground mb-4">Running a BSC Full Node (Optional)</h2>
-          <p className="text-muted-foreground mb-6">
-            For advanced users who want to support the BNB Smart Chain network directly by running a full node. 
-            This is completely optional and not required to earn DePIN rewards.
-          </p>
-
-          <div className="space-y-4 mb-6">
-            <div className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-accent mt-1 shrink-0" />
-              <div>
-                <p className="font-medium text-foreground">What is a BSC Full Node?</p>
-                <p className="text-sm text-muted-foreground">
-                  A full node downloads and validates the entire BNB Smart Chain blockchain (~2TB). 
-                  It helps secure the network by validating all transactions and blocks.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <CheckCircle className="w-5 h-5 text-accent mt-1 shrink-0" />
-              <div>
-                <p className="font-medium text-foreground">Why Run One?</p>
-                <p className="text-sm text-muted-foreground">
-                  Help decentralize BSC, provide RPC endpoints for dApps, and contribute to network security. 
-                  Note: This is altruistic and does not provide direct financial rewards from BSC.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 mb-6">
-            <h3 className="text-lg font-semibold text-foreground mb-3">Official BSC Node Setup</h3>
-            <ol className="space-y-2 text-sm text-muted-foreground mb-4">
-              <li>1. Install Go 1.19+ and build tools</li>
-              <li>2. Clone the BSC repository</li>
-              <li>3. Download genesis.json and config.toml</li>
-              <li>4. Initialize and sync the blockchain</li>
-              <li>5. Run the node 24/7 for full synchronization</li>
-            </ol>
-            <Button size="sm" variant="outline" asChild>
-              <a 
-                href="https://docs.bnbchain.org/docs/validator/fullnode" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2"
-              >
-                View BSC Official Documentation
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </Button>
-          </div>
-
-          <div className="bg-muted/20 rounded-lg p-4">
-            <p className="text-sm text-muted-foreground">
-              <span className="font-semibold text-foreground">Important:</span> Running a BSC full node is resource-intensive 
-              and separate from the DePIN bandwidth node. Most users only need to run the DePIN node software to earn rewards.
-            </p>
-          </div>
+        {/* Tips */}
+        <Card className="bg-primary/5 border-primary/20 p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-3">Tips for Maximum Points</h3>
+          <ul className="space-y-2 text-sm text-muted-foreground">
+            <li className="flex items-start gap-2">
+              <span className="text-primary">1.</span>
+              <span>Run the highest tier node your hardware supports - Archive nodes earn 2.5x more than Fast nodes</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary">2.</span>
+              <span>Maintain high uptime - Points accumulate hourly, so 24/7 operation maximizes earnings</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary">3.</span>
+              <span>Keep response latency low - Fast responses (under 150ms) ensure all verifications pass</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-primary">4.</span>
+              <span>Use NVMe SSDs - Faster storage means faster query responses and better verification rates</span>
+            </li>
+          </ul>
         </Card>
       </div>
     </div>
   );
 }
-

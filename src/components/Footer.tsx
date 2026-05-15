@@ -86,7 +86,7 @@ function SocialLinks() {
 function Copyright() {
   return (
     <div className="text-sm text-muted-foreground">
-      <p>© 2025 BNB DePIN. Built on BNB Smart Chain.</p>
+      <p>© 2025-2026 BNB DePIN. Built on BNB Smart Chain.</p>
     </div>
   );
 }

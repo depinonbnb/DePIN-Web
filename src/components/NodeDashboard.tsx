@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { BandwidthChart } from './BandwidthChart';
 import { NodeInfo } from './NodeInfo';
-import { BandwidthReport } from './BandwidthReport';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -41,12 +39,7 @@ export function NodeDashboard() {
         </form>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
-        <NodeInfo address={selectedAddress} />
-        <BandwidthReport address={selectedAddress} />
-      </div>
-
-      <BandwidthChart address={selectedAddress} />
+      <NodeInfo address={selectedAddress} />
     </section>
   );
 }

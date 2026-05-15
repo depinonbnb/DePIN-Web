@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Card } from '../components/ui/card';
-import { Search, Wallet as WalletIcon, Activity, Clock, Award, AlertCircle, Trash2 } from 'lucide-react';
+import { Search, Wallet as WalletIcon, Activity, Clock, Award, AlertCircle, Trash2, Server, Shield, CheckCircle } from 'lucide-react';
 
 interface NodeInfo {
   address: string;
@@ -13,6 +13,11 @@ interface NodeInfo {
   stakedAmount: string;
   stakedAt: string;
   isActive: boolean;
+  nodeType?: string;
+  verificationMethod?: string;
+  antiCheatStatus?: string;
+  verificationsPassed?: number;
+  lastVerified?: string;
 }
 
 export function Nodes() {
@@ -60,9 +65,14 @@ export function Nodes() {
           nodeId: nodeData.nodeId,
           stakedAmount: ethers.formatEther(nodeData.stakedAmount),
           stakedAt: new Date(Number(nodeData.stakedAt) * 1000).toLocaleString(),
-          isActive: nodeData.isActive
+          isActive: nodeData.isActive,
+          nodeType: 'BSC Full', // TODO: Get from contract when available
+          verificationMethod: 'Local Prover',
+          antiCheatStatus: 'Clean',
+          verificationsPassed: 0,
+          lastVerified: '-'
         };
-        
+
         setMyNodes([nodeInfo]);
       } else {
         setMyNodes([]);
@@ -121,9 +131,14 @@ export function Nodes() {
         nodeId: nodeData.nodeId,
         stakedAmount: ethers.formatEther(nodeData.stakedAmount),
         stakedAt: new Date(Number(nodeData.stakedAt) * 1000).toLocaleString(),
-        isActive: nodeData.isActive
+        isActive: nodeData.isActive,
+        nodeType: 'BSC Full', // TODO: Get from contract when available
+        verificationMethod: 'Local Prover',
+        antiCheatStatus: 'Clean',
+        verificationsPassed: 0,
+        lastVerified: '-'
       };
-      
+
       setSearchedNode(nodeInfo);
       setLoading(false);
     } catch (err: any) {
@@ -197,37 +212,72 @@ export function Nodes() {
             <h3 className="text-lg font-semibold text-foreground">{node.nodeId}</h3>
             <p className="text-sm text-muted-foreground break-all">{node.address}</p>
           </div>
-          <div className={`px-3 py-1 rounded-full text-xs font-medium ${
-            node.isActive 
-              ? 'bg-accent/10 text-accent border border-accent' 
-              : 'bg-destructive/10 text-destructive border border-destructive'
-          }`}>
-            {node.isActive ? 'Active' : 'Inactive'}
+          <div className="flex items-center gap-2">
+            <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+              node.antiCheatStatus === 'Clean'
+                ? 'bg-accent/10 text-accent border border-accent'
+                : node.antiCheatStatus === 'Warning'
+                ? 'bg-warning/10 text-warning border border-warning'
+                : 'bg-destructive/10 text-destructive border border-destructive'
+            }`}>
+              {node.antiCheatStatus || 'Clean'}
+            </div>
+            <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+              node.isActive
+                ? 'bg-accent/10 text-accent border border-accent'
+                : 'bg-destructive/10 text-destructive border border-destructive'
+            }`}>
+              {node.isActive ? 'Active' : 'Inactive'}
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-            <WalletIcon className="w-5 h-5 text-accent" />
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+            <Server className="w-4 h-4 text-primary" />
             <div>
-              <p className="text-xs text-muted-foreground">Staked Amount</p>
+              <p className="text-xs text-muted-foreground">Node Type</p>
+              <p className="text-sm font-medium text-foreground">{node.nodeType || 'BSC Full'}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+            <Shield className="w-4 h-4 text-primary" />
+            <div>
+              <p className="text-xs text-muted-foreground">Verification</p>
+              <p className="text-sm font-medium text-foreground">{node.verificationMethod || 'Local Prover'}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+            <WalletIcon className="w-4 h-4 text-accent" />
+            <div>
+              <p className="text-xs text-muted-foreground">Staked</p>
               <p className="text-sm font-medium text-foreground">{node.stakedAmount} BNB</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-            <Clock className="w-5 h-5 text-accent" />
+          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+            <CheckCircle className="w-4 h-4 text-accent" />
             <div>
-              <p className="text-xs text-muted-foreground">Registered</p>
-              <p className="text-sm font-medium text-foreground">{node.stakedAt}</p>
+              <p className="text-xs text-muted-foreground">Verifications</p>
+              <p className="text-sm font-medium text-foreground">{node.verificationsPassed || 0}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
-            <Award className="w-5 h-5 text-accent" />
+          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+            <Clock className="w-4 h-4 text-accent" />
             <div>
-              <p className="text-xs text-muted-foreground">Total Points</p>
-              <p className="text-sm font-medium text-foreground">0</p>
+              <p className="text-xs text-muted-foreground">Last Verified</p>
+              <p className="text-sm font-medium text-foreground">{node.lastVerified || '-'}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+            <Award className="w-4 h-4 text-primary" />
+            <div>
+              <p className="text-xs text-muted-foreground">Points</p>
+              <p className="text-sm font-medium text-primary">0</p>
             </div>
           </div>
         </div>
@@ -236,12 +286,12 @@ export function Nodes() {
           <div className="flex items-center gap-2 text-sm mb-4">
             <Activity className={`w-4 h-4 ${node.isActive ? 'text-accent' : 'text-muted-foreground'}`} />
             <span className="text-muted-foreground">
-              Status: {node.isActive ? 'Node is active and earning rewards' : 'Node is currently inactive'}
+              Status: {node.isActive ? 'Node is active and earning points' : 'Node is currently inactive'}
             </span>
           </div>
 
           {address?.toLowerCase() === node.address.toLowerCase() && (
-            <Button 
+            <Button
               onClick={handleUnstake}
               className="w-full bg-destructive hover:bg-destructive/90 text-destructive-foreground flex items-center gap-2"
               disabled={loading}

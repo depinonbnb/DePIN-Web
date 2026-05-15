@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getNetworkStats, NetworkStats as NetworkStatsType } from '../lib/api';
-import { Activity, Server, Wifi, TrendingUp } from 'lucide-react';
+import { Activity, Server, CheckCircle, TrendingUp, Award } from 'lucide-react';
 
 export function NetworkStats() {
   const [stats, setStats] = useState<NetworkStatsType | null>(null);
@@ -51,23 +51,23 @@ export function NetworkStats() {
 
         <div className="bg-card border border-border rounded-lg p-4 sm:p-6">
           <div className="flex items-center gap-2 sm:gap-3 mb-2">
-            <Wifi className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
-            <div className="text-muted-foreground text-sm sm:text-base">Total Bandwidth</div>
+            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+            <div className="text-muted-foreground text-sm sm:text-base">Total Verifications</div>
           </div>
-          <div className="text-2xl sm:text-3xl text-foreground">{stats.totalBandwidth.toFixed(1)} <span className="text-base sm:text-lg">TB</span></div>
+          <div className="text-2xl sm:text-3xl text-foreground">{stats.totalVerifications.toLocaleString()}</div>
         </div>
 
         <div className="bg-card border border-border rounded-lg p-4 sm:p-6">
           <div className="flex items-center gap-2 sm:gap-3 mb-2">
             <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
-            <div className="text-muted-foreground text-sm sm:text-base">Avg Uptime</div>
+            <div className="text-muted-foreground text-sm sm:text-base">Success Rate</div>
           </div>
-          <div className="text-2xl sm:text-3xl text-foreground">{stats.averageUptime.toFixed(1)}<span className="text-base sm:text-lg">%</span></div>
+          <div className="text-2xl sm:text-3xl text-foreground">{stats.verificationSuccessRate.toFixed(1)}<span className="text-base sm:text-lg">%</span></div>
         </div>
 
         <div className="bg-card border border-border rounded-lg p-4 sm:p-6">
           <div className="flex items-center gap-2 sm:gap-3 mb-2">
-            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
+            <Award className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
             <div className="text-muted-foreground text-sm sm:text-base">Total Points</div>
           </div>
           <div className="text-2xl sm:text-3xl text-foreground">{stats.totalPoints.toLocaleString()}</div>

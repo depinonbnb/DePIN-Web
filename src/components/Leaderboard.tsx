@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getLeaderboard, LeaderboardNode } from '../lib/api';
-import { Trophy, Medal } from 'lucide-react';
+import { Trophy, Medal, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
 
 export function Leaderboard() {
   const [nodes, setNodes] = useState<LeaderboardNode[]>([]);
@@ -18,6 +18,19 @@ export function Leaderboard() {
     if (rank === 2) return <Medal className="w-5 h-5 text-muted-foreground" />;
     if (rank === 3) return <Medal className="w-5 h-5 text-orange-600" />;
     return <span className="text-muted-foreground">#{rank}</span>;
+  };
+
+  const getAntiCheatIcon = (status: string) => {
+    switch (status) {
+      case 'Clean':
+        return <CheckCircle className="w-4 h-4 text-accent" />;
+      case 'Warning':
+        return <AlertTriangle className="w-4 h-4 text-warning" />;
+      case 'Flagged':
+        return <XCircle className="w-4 h-4 text-destructive" />;
+      default:
+        return <CheckCircle className="w-4 h-4 text-accent" />;
+    }
   };
 
   if (loading) {
@@ -42,9 +55,9 @@ export function Leaderboard() {
                 <tr>
                   <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-foreground text-sm sm:text-base">Rank</th>
                   <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-foreground text-sm sm:text-base">Address</th>
-                  <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Bandwidth (GB)</th>
-                  <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Uptime (%)</th>
-                  <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Reputation</th>
+                  <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Verifications</th>
+                  <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Uptime (hrs)</th>
+                  <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Anti-Cheat</th>
                   <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Points</th>
                 </tr>
               </thead>
@@ -57,12 +70,19 @@ export function Leaderboard() {
                       </div>
                     </td>
                     <td className="px-4 sm:px-6 py-3 sm:py-4 font-mono text-foreground text-sm sm:text-base">{node.address}</td>
-                    <td className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">{node.bandwidth.toFixed(1)}</td>
+                    <td className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">{node.verificationsPassed.toLocaleString()}</td>
                     <td className="px-4 sm:px-6 py-3 sm:py-4 text-right">
-                      <span className="text-accent text-sm sm:text-base">{node.uptime.toFixed(1)}%</span>
+                      <span className="text-accent text-sm sm:text-base">{node.uptimeHours.toLocaleString()}</span>
                     </td>
                     <td className="px-4 sm:px-6 py-3 sm:py-4 text-right">
-                      <span className="text-primary text-sm sm:text-base">{node.reputation}</span>
+                      <div className="flex items-center justify-end gap-1.5">
+                        {getAntiCheatIcon(node.antiCheatStatus)}
+                        <span className={`text-sm sm:text-base ${
+                          node.antiCheatStatus === 'Clean' ? 'text-accent' :
+                          node.antiCheatStatus === 'Warning' ? 'text-warning' :
+                          'text-destructive'
+                        }`}>{node.antiCheatStatus}</span>
+                      </div>
                     </td>
                     <td className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">{node.points.toLocaleString()}</td>
                   </tr>

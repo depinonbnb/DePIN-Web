@@ -1,19 +1,42 @@
-
-
 import { useState, useEffect } from 'react';
 import { useWallet } from '../lib/wallet';
 import { registerNodeOnChain, switchToBSCTestnet, getMinimumStake, checkNetwork } from '../lib/contracts';
-import { registerNode } from '../lib/api';
+import {
+  registerNode,
+  NODE_TYPES,
+  VERIFICATION_METHODS,
+  type NodeType,
+  type VerificationMethod,
+} from '../lib/api';
 import { ethers } from 'ethers';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card } from '../components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../components/ui/select';
 import { AlertTriangle, CheckCircle, XCircle, Info, Wallet } from 'lucide-react';
+
+function isValidRpcUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'http:' || url.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
 
 export function Register() {
   const { address, signer, isConnecting, connectWallet } = useWallet();
   const [nodeId, setNodeId] = useState('');
+  const [nodeType, setNodeType] = useState<NodeType>('bsc-full');
+  const [verificationMethod, setVerificationMethod] = useState<VerificationMethod>('exposed-rpc');
+  const [rpcEndpoint, setRpcEndpoint] = useState('');
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [stakeAmount, setStakeAmount] = useState('0.1');
@@ -67,6 +90,11 @@ export function Register() {
 
     if (!nodeId || nodeId.length < 5) {
       setStatus('ERROR: Please enter a valid node ID (min 5 characters)');
+      return;
+    }
+
+    if (verificationMethod === 'exposed-rpc' && !isValidRpcUrl(rpcEndpoint)) {
+      setStatus('ERROR: Enter a valid public RPC URL (http:// or https://) for the exposed-RPC method');
       return;
     }
 
@@ -136,27 +164,26 @@ export function Register() {
         setStatus('Transaction sent. Waiting for confirmation...');
       }
       
-      // Register in backend
-      setStatus('Registering node in backend...');
-      
-      // Sign the nodeId for backend verification
-      const message = `Register node: ${nodeId}`;
-      const signature = await signer.signMessage(message);
-      
+      // Register in backend (Phase 3 protocol — nonce + timestamp + EIP-191 signed message built inside api.registerNode)
+      setStatus('Registering node in backend (please approve the signature in your wallet)...');
+
       const backendResult = await registerNode({
-        address,
-        nodeId,
-        signature,
-        rpcUrl: ''
+        signer,
+        walletAddress: address,
+        nodeType,
+        verificationMethod,
+        rpcEndpoint: verificationMethod === 'exposed-rpc' ? rpcEndpoint : undefined,
       });
 
       if (backendResult.success) {
         const txInfo = txHash ? ` Tx: ${txHash}` : '';
-        setStatus(`SUCCESS: Node registered successfully!${txInfo}`);
+        const idInfo = backendResult.nodeId ? ` Node ID: ${backendResult.nodeId}.` : '';
+        setStatus(`SUCCESS: Node registered.${idInfo}${txInfo}`);
         setNodeId('');
+        setRpcEndpoint('');
       } else {
         const txInfo = txHash ? ` Tx: ${txHash}` : '';
-        setStatus(`WARNING: Backend registration failed.${txInfo} Error: ${backendResult.message}`);
+        setStatus(`WARNING: Backend registration failed.${txInfo} ${backendResult.message}`);
       }
 
       setLoading(false);
@@ -246,6 +273,77 @@ export function Register() {
                     </p>
                   </div>
 
+                  <div>
+                    <Label htmlFor="node-type">Node Type</Label>
+                    <Select
+                      value={nodeType}
+                      onValueChange={(v) => setNodeType(v as NodeType)}
+                      disabled={loading}
+                    >
+                      <SelectTrigger id="node-type" className="mt-2">
+                        <SelectValue placeholder="Pick a node type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {NODE_TYPES.map((t) => (
+                          <SelectItem key={t.value} value={t.value}>
+                            <div className="flex flex-col items-start">
+                              <span>{t.label}</span>
+                              <span className="text-xs text-muted-foreground">{t.description}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="verification-method">Verification Method</Label>
+                    <Select
+                      value={verificationMethod}
+                      onValueChange={(v) => setVerificationMethod(v as VerificationMethod)}
+                      disabled={loading}
+                    >
+                      <SelectTrigger id="verification-method" className="mt-2">
+                        <SelectValue placeholder="How should we verify your node?" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {VERIFICATION_METHODS.map((m) => (
+                          <SelectItem key={m.value} value={m.value}>
+                            <div className="flex flex-col items-start">
+                              <span>{m.label}</span>
+                              <span className="text-xs text-muted-foreground">{m.description}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {verificationMethod === 'exposed-rpc' && (
+                    <div>
+                      <Label htmlFor="rpc-endpoint">Node RPC URL</Label>
+                      <Input
+                        id="rpc-endpoint"
+                        type="url"
+                        value={rpcEndpoint}
+                        onChange={(e) => setRpcEndpoint(e.target.value)}
+                        placeholder="https://your-node.example.com:8545"
+                        disabled={loading}
+                        className="mt-2"
+                      />
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Public URL where your BNB node's JSON-RPC is reachable. Must be http(s) and publicly addressable.
+                      </p>
+                    </div>
+                  )}
+
+                  {verificationMethod === 'local-prover' && (
+                    <div className="bg-primary/5 border border-primary/20 rounded-lg p-4 text-sm text-muted-foreground">
+                      You'll need to run the open-source <span className="font-mono text-foreground">prover</span> CLI on your machine after
+                      registration. It polls the API on your behalf — no public RPC required. See the README for setup.
+                    </div>
+                  )}
+
                   <div className="bg-muted border border-border rounded-lg p-4">
                     <h3 className="text-foreground font-medium mb-2">Registration Requirements:</h3>
                     <ul className="space-y-1 text-sm text-muted-foreground">
@@ -268,10 +366,15 @@ export function Register() {
                     </ul>
                   </div>
 
-                  <Button 
+                  <Button
                     onClick={handleRegister}
                     className="w-full"
-                    disabled={loading || !nodeId || isConnecting}
+                    disabled={
+                      loading ||
+                      !nodeId ||
+                      isConnecting ||
+                      (verificationMethod === 'exposed-rpc' && !isValidRpcUrl(rpcEndpoint))
+                    }
                     size="lg"
                   >
                     {loading ? 'Registering...' : 'Register Node'}
@@ -301,34 +404,34 @@ export function Register() {
                 <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">1</span>
                 <div>
                   <strong className="text-foreground">Register on-chain</strong>
-                  <p className="text-sm text-muted-foreground mt-1">Your node will be registered on the BSC smart contract with your stake</p>
+                  <p className="text-sm text-muted-foreground mt-1">Your node will be registered on the BSC smart contract with a signed message from your wallet</p>
                 </div>
               </li>
               <li className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">2</span>
                 <div>
-                  <strong className="text-foreground">Download node software</strong>
-                  <p className="text-sm text-muted-foreground mt-1">Download and install the node software on your computer</p>
+                  <strong className="text-foreground">Download Prover CLI</strong>
+                  <p className="text-sm text-muted-foreground mt-1">Download and install the prover software on your computer</p>
                 </div>
               </li>
               <li className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">3</span>
                 <div>
-                  <strong className="text-foreground">Start sharing bandwidth</strong>
-                  <p className="text-sm text-muted-foreground mt-1">Run the software to start sharing bandwidth and earning points</p>
+                  <strong className="text-foreground">Configure your node RPC</strong>
+                  <p className="text-sm text-muted-foreground mt-1">Point the prover to your local BSC/opBNB node's RPC endpoint</p>
                 </div>
               </li>
               <li className="flex gap-3">
                 <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">4</span>
                 <div>
-                  <strong className="text-foreground">Earn points</strong>
-                  <p className="text-sm text-muted-foreground mt-1">Earn 100 points per GB of bandwidth shared</p>
+                  <strong className="text-foreground">Prove & Earn</strong>
+                  <p className="text-sm text-muted-foreground mt-1">Prover handles verifications every 5 min. Earn points for uptime + successful verifications</p>
                 </div>
               </li>
             </ol>
 
             <div className="border-t border-border pt-6">
-              <h3 className="text-foreground font-medium mb-4">Download Node Software</h3>
+              <h3 className="text-foreground font-medium mb-4">Download Prover CLI</h3>
               <div className="grid grid-cols-3 gap-3">
                 <Button variant="outline" className="w-full" disabled>
                   Windows
