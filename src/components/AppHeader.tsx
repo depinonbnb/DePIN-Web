@@ -160,6 +160,14 @@ export function AppHeader() {
               Nodes
             </Link>
             <Link
+              to="/explorer"
+              className={`transition-colors ${
+                isActive('/explorer') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              Explorer
+            </Link>
+            <Link
               to="/leaderboard"
               className={`transition-colors ${
                 isActive('/leaderboard') ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
@@ -269,6 +277,15 @@ export function AppHeader() {
                   }`}
                 >
                   Nodes
+                </Link>
+                <Link
+                  to="/explorer"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`px-4 py-3 rounded-lg transition-colors ${
+                    isActive('/explorer') ? 'bg-primary text-primary-foreground' : 'text-foreground hover:bg-muted'
+                  }`}
+                >
+                  Explorer
                 </Link>
                 <Link
                   to="/leaderboard"

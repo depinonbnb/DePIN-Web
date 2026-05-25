@@ -9,6 +9,7 @@ import { Earn } from './pages/Earn';
 import { Requirements } from './pages/Requirements';
 import { HowItWorks } from './pages/HowItWorks';
 import { Nodes } from './pages/Nodes';
+import { Explorer } from './pages/Explorer';
 import { Toaster } from './components/ui/sonner';
 import { WalletProvider } from './lib/wallet';
 
@@ -28,6 +29,7 @@ export default function App() {
               <Route path="/earn" element={<Earn />} />
               <Route path="/requirements" element={<Requirements />} />
               <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/explorer" element={<Explorer />} />
             </Routes>
           </main>
           <Footer />

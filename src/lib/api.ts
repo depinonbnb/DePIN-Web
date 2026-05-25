@@ -144,6 +144,61 @@ export async function getNodeInfo(address: string): Promise<NodeInfo> {
   }
 }
 
+export interface ExplorerNode {
+  rank: number;
+  nodeId: string;
+  walletAddress: string;
+  nodeType: NodeType;
+  totalPoints: number;
+  totalUptimeHours: number;
+  challengePassRate: number;
+  registeredAt: number;
+}
+
+// GET /api/leaderboard — returns all active non-banned nodes (max 100, sorted by points desc)
+export async function getExplorerNodes(): Promise<ExplorerNode[]> {
+  try {
+    const response = await fetch(`${API_URL}/leaderboard`);
+    const data = await response.json();
+    if (!Array.isArray(data)) return [];
+    return data.map((n: any) => ({
+      rank: n.rank,
+      nodeId: n.node_id,
+      walletAddress: n.wallet_address,
+      nodeType: n.node_type,
+      totalPoints: n.total_points ?? 0,
+      totalUptimeHours: n.total_uptime_hours ?? 0,
+      challengePassRate: n.challenge_pass_rate ?? 0,
+      registeredAt: n.registered_at ?? 0,
+    }));
+  } catch (error) {
+    console.error('Error fetching explorer nodes:', error);
+    return [];
+  }
+}
+
+// GET /api/nodes/wallet/:walletAddress
+export async function getNodesByWallet(wallet: string): Promise<ExplorerNode[]> {
+  try {
+    const response = await fetch(`${API_URL}/nodes/wallet/${wallet.toLowerCase()}`);
+    const data = await response.json();
+    if (!Array.isArray(data)) return [];
+    return data.map((n: any) => ({
+      rank: 0,
+      nodeId: n.ID || n.id || n.node_id,
+      walletAddress: n.WalletAddress || n.wallet_address,
+      nodeType: n.NodeType || n.node_type,
+      totalPoints: n.TotalPoints || n.total_points || 0,
+      totalUptimeHours: (n.TotalUptimeMinutes || 0) / 60,
+      challengePassRate: 0,
+      registeredAt: n.RegisteredAt || n.registered_at || 0,
+    }));
+  } catch (error) {
+    console.error('Error fetching nodes by wallet:', error);
+    return [];
+  }
+}
+
 export interface RegisterNodeArgs {
   signer: ethers.Signer;
   walletAddress: string;
