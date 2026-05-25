@@ -20,7 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../components/ui/select';
-import { AlertTriangle, CheckCircle, XCircle, Info, Wallet } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { AlertTriangle, CheckCircle, XCircle, Info, Wallet, Copy, Terminal, Download, ArrowRight, ExternalLink } from 'lucide-react';
 
 function isValidRpcUrl(value: string): boolean {
   try {
@@ -42,6 +43,8 @@ export function Register() {
   const [stakeAmount, setStakeAmount] = useState('0.1');
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(false);
   const [hasEnoughBalance, setHasEnoughBalance] = useState(false);
+  const [registeredNodeId, setRegisteredNodeId] = useState<string | null>(null);
+  const [registeredTxHash, setRegisteredTxHash] = useState<string | null>(null);
 
   // Check network and balance when wallet connects
   useEffect(() => {
@@ -176,11 +179,9 @@ export function Register() {
       });
 
       if (backendResult.success) {
-        const txInfo = txHash ? ` Tx: ${txHash}` : '';
-        const idInfo = backendResult.nodeId ? ` Node ID: ${backendResult.nodeId}.` : '';
-        setStatus(`SUCCESS: Node registered.${idInfo}${txInfo}`);
-        setNodeId('');
-        setRpcEndpoint('');
+        setRegisteredNodeId(backendResult.nodeId || nodeId);
+        setRegisteredTxHash(txHash || null);
+        setStatus('SUCCESS');
       } else {
         const txInfo = txHash ? ` Tx: ${txHash}` : '';
         setStatus(`WARNING: Backend registration failed.${txInfo} ${backendResult.message}`);
@@ -396,59 +397,216 @@ export function Register() {
             )}
           </Card>
 
-          {/* Info Card */}
-          <Card className="bg-card border-border p-6">
-            <h2 className="text-2xl text-foreground mb-6">What Happens Next?</h2>
-            <ol className="space-y-4 mb-6">
-              <li className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">1</span>
-                <div>
-                  <strong className="text-foreground">Register on-chain</strong>
-                  <p className="text-sm text-muted-foreground mt-1">Your node will be registered on the BSC smart contract with a signed message from your wallet</p>
-                </div>
-              </li>
-              <li className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">2</span>
-                <div>
-                  <strong className="text-foreground">Download Prover CLI</strong>
-                  <p className="text-sm text-muted-foreground mt-1">Download and install the prover software on your computer</p>
-                </div>
-              </li>
-              <li className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">3</span>
-                <div>
-                  <strong className="text-foreground">Configure your node RPC</strong>
-                  <p className="text-sm text-muted-foreground mt-1">Point the prover to your local BSC/opBNB node's RPC endpoint</p>
-                </div>
-              </li>
-              <li className="flex gap-3">
-                <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">4</span>
-                <div>
-                  <strong className="text-foreground">Prove & Earn</strong>
-                  <p className="text-sm text-muted-foreground mt-1">Prover handles verifications every 5 min. Earn points for uptime + successful verifications</p>
-                </div>
-              </li>
-            </ol>
+          {registeredNodeId ? (
+            <SuccessCard
+              nodeId={registeredNodeId}
+              walletAddress={address || ''}
+              nodeType={nodeType}
+              verificationMethod={verificationMethod}
+              txHash={registeredTxHash}
+              onRegisterAnother={() => {
+                setRegisteredNodeId(null);
+                setRegisteredTxHash(null);
+                setStatus('');
+                setNodeId('');
+                setRpcEndpoint('');
+              }}
+            />
+          ) : (
+            <Card className="bg-card border-border p-6">
+              <h2 className="text-2xl text-foreground mb-6">What Happens Next?</h2>
+              <ol className="space-y-4 mb-6">
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">1</span>
+                  <div>
+                    <strong className="text-foreground">Register on-chain</strong>
+                    <p className="text-sm text-muted-foreground mt-1">Your node will be registered on the BSC smart contract with a signed message from your wallet</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">2</span>
+                  <div>
+                    <strong className="text-foreground">Download Prover CLI</strong>
+                    <p className="text-sm text-muted-foreground mt-1">Download and install the prover software on your computer</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">3</span>
+                  <div>
+                    <strong className="text-foreground">Configure your node RPC</strong>
+                    <p className="text-sm text-muted-foreground mt-1">Point the prover to your local BSC/opBNB node's RPC endpoint</p>
+                  </div>
+                </li>
+                <li className="flex gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-medium">4</span>
+                  <div>
+                    <strong className="text-foreground">Prove & Earn</strong>
+                    <p className="text-sm text-muted-foreground mt-1">Prover handles verifications every 5 min. Earn points for uptime + successful verifications</p>
+                  </div>
+                </li>
+              </ol>
 
-            <div className="border-t border-border pt-6">
-              <h3 className="text-foreground font-medium mb-4">Download Prover CLI</h3>
-              <div className="grid grid-cols-3 gap-3">
-                <Button variant="outline" className="w-full" disabled>
-                  Windows
-                </Button>
-                <Button variant="outline" className="w-full" disabled>
-                  macOS
-                </Button>
-                <Button variant="outline" className="w-full" disabled>
-                  Linux
-                </Button>
+              <div className="border-t border-border pt-6">
+                <h3 className="text-foreground font-medium mb-4">Download Prover CLI</h3>
+                <div className="grid grid-cols-3 gap-3">
+                  <Button variant="outline" className="w-full" disabled>
+                    Windows
+                  </Button>
+                  <Button variant="outline" className="w-full" disabled>
+                    macOS
+                  </Button>
+                  <Button variant="outline" className="w-full" disabled>
+                    Linux
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground mt-2">Coming soon</p>
               </div>
-              <p className="text-xs text-muted-foreground mt-2">Coming soon</p>
-            </div>
-          </Card>
+            </Card>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
+interface SuccessCardProps {
+  nodeId: string;
+  walletAddress: string;
+  nodeType: NodeType;
+  verificationMethod: VerificationMethod;
+  txHash: string | null;
+  onRegisterAnother: () => void;
+}
+
+function SuccessCard({ nodeId, walletAddress, nodeType, verificationMethod, txHash, onRegisterAnother }: SuccessCardProps) {
+  const [copied, setCopied] = useState(false);
+
+  const apiUrl = import.meta.env.VITE_API_URL || 'https://api.depinonbnb.com/api';
+
+  const cliConfig = [
+    `export PROVER_PRIVATE_KEY="<your-wallet-private-key>"`,
+    `export NODE_RPC="http://localhost:8545"`,
+    `export DEPIN_API="${apiUrl}"`,
+    `export NODE_TYPE="${nodeType}"`,
+    `./prover`,
+  ].join('\n');
+
+  const copyConfig = async () => {
+    await navigator.clipboard.writeText(cliConfig);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <Card className="bg-card border-border p-6">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-12 h-12 rounded-full bg-accent/20 flex items-center justify-center">
+          <CheckCircle className="w-6 h-6 text-accent" />
+        </div>
+        <div>
+          <h2 className="text-2xl font-bold text-foreground">Node Registered</h2>
+          <p className="text-sm text-muted-foreground">your node is live on the network</p>
+        </div>
+      </div>
+
+      <div className="bg-muted/50 border border-border rounded-lg p-4 mb-6 space-y-2 text-sm">
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">node id</span>
+          <span className="font-mono text-foreground">{nodeId}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">wallet</span>
+          <span className="font-mono text-foreground">{walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">type</span>
+          <span className="text-foreground">{nodeType}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-muted-foreground">verification</span>
+          <span className="text-foreground">{verificationMethod}</span>
+        </div>
+        {txHash && (
+          <div className="flex justify-between items-center">
+            <span className="text-muted-foreground">tx</span>
+            <a
+              href={`https://testnet.bscscan.com/tx/${txHash}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-primary text-xs hover:underline inline-flex items-center gap-1"
+            >
+              {txHash.slice(0, 10)}...{txHash.slice(-6)} <ExternalLink className="w-3 h-3" />
+            </a>
+          </div>
+        )}
+      </div>
+
+      {verificationMethod === 'local-prover' && (
+        <>
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Terminal className="w-4 h-4 text-primary" />
+                <h3 className="text-foreground font-medium">run the prover</h3>
+              </div>
+              <Button variant="ghost" size="sm" onClick={copyConfig} className="text-xs">
+                {copied ? <CheckCircle className="w-3 h-3 mr-1" /> : <Copy className="w-3 h-3 mr-1" />}
+                {copied ? 'copied' : 'copy'}
+              </Button>
+            </div>
+            <pre className="bg-[#1a1a2e] text-[#e0e0e0] rounded-lg p-4 text-xs font-mono overflow-x-auto whitespace-pre leading-relaxed">
+              {cliConfig}
+            </pre>
+            <p className="text-xs text-muted-foreground mt-2">
+              replace <span className="font-mono text-foreground">&lt;your-wallet-private-key&gt;</span> with the private key for{' '}
+              <span className="font-mono">{walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}</span>.
+              the prover signs challenge responses with this key — never share it.
+            </p>
+          </div>
+
+          <div className="mb-6">
+            <div className="flex items-center gap-2 mb-3">
+              <Download className="w-4 h-4 text-primary" />
+              <h3 className="text-foreground font-medium">download prover cli</h3>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <Button variant="outline" size="sm" disabled>
+                Linux
+              </Button>
+              <Button variant="outline" size="sm" disabled>
+                macOS
+              </Button>
+              <Button variant="outline" size="sm" disabled>
+                Windows
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              binaries coming soon. for now, build from source: <span className="font-mono">go build -o prover ./cmd/prover</span>
+            </p>
+          </div>
+        </>
+      )}
+
+      {verificationMethod === 'exposed-rpc' && (
+        <div className="mb-6 bg-accent/5 border border-accent/20 rounded-lg p-4">
+          <h3 className="text-foreground font-medium mb-1">you're all set</h3>
+          <p className="text-sm text-muted-foreground">
+            the server will start probing your node's RPC endpoint automatically every few minutes.
+            no CLI needed — just keep your node online. points accrue with each passed challenge and uptime tick.
+          </p>
+        </div>
+      )}
+
+      <div className="space-y-2">
+        <Link to="/explorer">
+          <Button className="w-full" variant="outline">
+            view your node in the explorer <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </Link>
+        <Button className="w-full" variant="ghost" onClick={onRegisterAnother}>
+          register another node
+        </Button>
+      </div>
+    </Card>
+  );
+}
