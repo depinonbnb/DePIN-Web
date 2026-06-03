@@ -1,7 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Globe, Wallet, Menu, Check } from 'lucide-react';
-import { Button } from './ui/button';
-import { useWallet } from '../lib/wallet';
+import { Globe, Menu, Check } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import {
   DropdownMenu,
@@ -28,7 +26,6 @@ const LANGUAGES = [
 
 export function AppHeader() {
   const location = useLocation();
-  const { address, isConnecting, connectWallet, disconnectWallet, changeWallet } = useWallet();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('en');
 
@@ -113,18 +110,6 @@ export function AppHeader() {
     return location.pathname === path;
   };
 
-  const formatAddress = (addr: string) => {
-    return `${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}`;
-  };
-
-  const handleDisconnect = () => {
-    disconnectWallet();
-  };
-
-  const handleChangeWallet = async () => {
-    await changeWallet();
-  };
-
   return (
     <header className="w-full bg-[#181A20] border-b border-border">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
@@ -197,35 +182,6 @@ export function AppHeader() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          {address ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm" variant="outline" className="flex items-center gap-2">
-                  <Wallet className="w-4 h-4" />
-                  <span className="hidden sm:inline">{formatAddress(address)}</span>
-                  <span className="sm:hidden">Wallet</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-card border-border">
-                <DropdownMenuItem onClick={handleChangeWallet} className="cursor-pointer">
-                  Change Wallet
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleDisconnect} className="cursor-pointer text-destructive">
-                  Disconnect
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <Button 
-              size="sm" 
-              onClick={connectWallet} 
-              disabled={isConnecting}
-              className="flex items-center gap-2"
-            >
-              <Wallet className="w-4 h-4" />
-              <span className="hidden sm:inline">{isConnecting ? 'Connecting...' : 'Connect'}</span>
-            </Button>
-          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button className="hidden sm:flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors">

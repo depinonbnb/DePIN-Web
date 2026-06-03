@@ -21,7 +21,7 @@ interface NodeInfo {
 }
 
 export function Nodes() {
-  const { address, signer, connectWallet, isConnecting } = useWallet();
+  const { address, signer } = useWallet();
   const [searchAddress, setSearchAddress] = useState('');
   const [myNodes, setMyNodes] = useState<NodeInfo[]>([]);
   const [searchedNode, setSearchedNode] = useState<NodeInfo | null>(null);
@@ -361,13 +361,10 @@ export function Nodes() {
           {!address ? (
             <Card className="p-8 text-center bg-card border-border">
               <WalletIcon className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-foreground mb-2">Connect Your Wallet</h3>
+              <h3 className="text-lg font-medium text-foreground mb-2">Look Up a Node</h3>
               <p className="text-muted-foreground mb-4">
-                Connect your wallet to view your registered nodes
+                Use the search above to find any registered node by its wallet address.
               </p>
-              <Button onClick={connectWallet} disabled={isConnecting}>
-                {isConnecting ? 'Connecting...' : 'Connect Wallet'}
-              </Button>
             </Card>
           ) : loading ? (
             <Card className="p-8 text-center bg-card border-border">

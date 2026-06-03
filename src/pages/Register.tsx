@@ -21,7 +21,7 @@ import {
   SelectValue,
 } from '../components/ui/select';
 import { Link } from 'react-router-dom';
-import { AlertTriangle, CheckCircle, XCircle, Info, Wallet, Copy, Terminal, Download, ArrowRight, ExternalLink } from 'lucide-react';
+import { AlertTriangle, CheckCircle, XCircle, Info, Copy, Terminal, Download, ArrowRight, ExternalLink } from 'lucide-react';
 
 function isValidRpcUrl(value: string): boolean {
   try {
@@ -33,7 +33,7 @@ function isValidRpcUrl(value: string): boolean {
 }
 
 export function Register() {
-  const { address, signer, isConnecting, connectWallet } = useWallet();
+  const { address, signer, isConnecting } = useWallet();
   const [nodeId, setNodeId] = useState('');
   const [nodeType, setNodeType] = useState<NodeType>('bsc-full');
   const [verificationMethod, setVerificationMethod] = useState<VerificationMethod>('exposed-rpc');
@@ -233,16 +233,15 @@ export function Register() {
               <div className="bg-card border border-primary/20 rounded-lg p-6 text-center">
                 <div className="flex flex-col items-center gap-4">
                   <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Wallet className="w-8 h-8 text-primary" />
+                    <Terminal className="w-8 h-8 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium text-foreground mb-2">Connect Your Wallet</h3>
-                    <p className="text-muted-foreground text-sm mb-4">
-                      Please connect your MetaMask wallet to register a node
+                    <h3 className="text-lg font-medium text-foreground mb-2">Registration via the Prover CLI</h3>
+                    <p className="text-muted-foreground text-sm">
+                      Node registration is handled through the open-source prover, not the website.
+                      Sync your BNB Chain node, then follow the steps on the right to register and
+                      start earning. The "What Happens Next?" panel walks you through it.
                     </p>
-                    <Button onClick={connectWallet} disabled={isConnecting} size="lg">
-                      {isConnecting ? 'Connecting...' : 'Connect Wallet'}
-                    </Button>
                   </div>
                 </div>
               </div>
