@@ -14,7 +14,7 @@ import { Toaster } from './components/ui/sonner';
 
 export default function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <div className="min-h-screen bg-background text-foreground flex flex-col">
         <AppHeader />
         <main className="flex-1">

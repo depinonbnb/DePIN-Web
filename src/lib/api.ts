@@ -58,84 +58,85 @@ export interface NodeInfo {
   registeredAt: string;
 }
 
-// GET /api/stats
+const EMPTY_STATS: NetworkStats = {
+  totalNodes: 0,
+  activeNodes: 0,
+  totalVerifications: 0,
+  verificationSuccessRate: 0,
+  totalPoints: 0,
+};
+
+// GET /api/stats — backend returns a flat snake_case object
 export async function getNetworkStats(): Promise<NetworkStats> {
   try {
     const response = await fetch(`${API_URL}/stats`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
 
-    if (!response.ok || !data.success) {
-      throw new Error(data.error || 'Failed to fetch network stats');
-    }
-
     return {
-      totalNodes: data.data.totalNodes || 0,
-      activeNodes: data.data.activeNodes || data.data.totalNodes || 0,
-      totalVerifications: data.data.totalVerifications || 0,
-      verificationSuccessRate: data.data.verificationSuccessRate || 98.7,
-      totalPoints: data.data.totalPoints || 0
+      totalNodes: data.total_nodes ?? 0,
+      activeNodes: data.active_nodes ?? 0,
+      totalVerifications: data.total_verifications ?? 0,
+      verificationSuccessRate: data.verification_success_rate ?? 0,
+      totalPoints: data.total_points ?? 0,
     };
   } catch (error) {
     console.error('Error fetching network stats:', error);
-    return {
-      totalNodes: 12458,
-      activeNodes: 10234,
-      totalVerifications: 1847293,
-      verificationSuccessRate: 98.7,
-      totalPoints: 12567890
-    };
+    return EMPTY_STATS;
   }
 }
 
-// GET /api/leaderboard
+function mapCheatStatus(status: unknown): 'Clean' | 'Warning' | 'Flagged' {
+  switch (status) {
+    case 'warning':
+      return 'Warning';
+    case 'flagged':
+      return 'Flagged';
+    default:
+      return 'Clean';
+  }
+}
+
+// GET /api/leaderboard — backend returns a raw array of snake_case entries
 export async function getLeaderboard(): Promise<LeaderboardNode[]> {
   try {
-    const response = await fetch(`${API_URL}/leaderboard?limit=10`);
+    const response = await fetch(`${API_URL}/leaderboard`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
-    
-    if (!response.ok || !data.success) {
-      throw new Error(data.error || 'Failed to fetch leaderboard');
-    }
-    
-    return data.data.map((node: any, index: number) => ({
-      rank: index + 1,
-      address: node.address || node.node_address,
-      verificationsPassed: node.verificationsPassed || node.total_verifications || 0,
-      uptimeHours: node.uptimeHours || node.uptime_hours || 0,
-      antiCheatStatus: node.antiCheatStatus || node.anti_cheat_status || 'Clean',
-      points: node.totalPoints || node.points || 0
+    if (!Array.isArray(data)) return [];
+
+    return data.map((node: any) => ({
+      rank: node.rank ?? 0,
+      address: node.wallet_address ?? '',
+      verificationsPassed: node.total_challenges_passed ?? 0,
+      uptimeHours: node.total_uptime_hours ?? 0,
+      antiCheatStatus: mapCheatStatus(node.cheat_status),
+      points: node.total_points ?? 0,
     }));
   } catch (error) {
     console.error('Error fetching leaderboard:', error);
-    return [
-      { rank: 1, address: '0x742d...4f2a', verificationsPassed: 2847, uptimeHours: 720, antiCheatStatus: 'Clean' as const, points: 245050 },
-      { rank: 2, address: '0x3a9f...7b1c', verificationsPassed: 2651, uptimeHours: 695, antiCheatStatus: 'Clean' as const, points: 234025 },
-      { rank: 3, address: '0x8e4c...9d3e', verificationsPassed: 2498, uptimeHours: 672, antiCheatStatus: 'Clean' as const, points: 221080 },
-    ];
+    return [];
   }
 }
 
-// GET /api/nodes/:address
-export async function getNodeInfo(address: string): Promise<NodeInfo> {
+// GET /api/nodes/:nodeId — backend returns the raw node object (snake_case)
+export async function getNodeInfo(nodeId: string): Promise<NodeInfo> {
   try {
-    const response = await fetch(`${API_URL}/nodes/${address}`);
+    const response = await fetch(`${API_URL}/nodes/${nodeId}`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
-    
-    if (!response.ok || !data.success) {
-      throw new Error(data.error || 'Failed to fetch node info');
-    }
-    
+
     return {
-      address: data.data.address,
-      status: data.data.is_active ? 'active' : 'inactive',
-      uptime: 99.0,
-      points: data.data.points || 0,
-      registeredAt: data.data.created_at || new Date().toISOString()
+      address: data.wallet_address ?? '',
+      status: data.is_active ? 'active' : 'inactive',
+      uptime: (data.total_uptime_minutes ?? 0) / 60,
+      points: data.total_points ?? 0,
+      registeredAt: data.registered_at ? new Date(data.registered_at * 1000).toISOString() : new Date().toISOString(),
     };
   } catch (error) {
     console.error('Error fetching node info:', error);
     return {
-      address,
+      address: '',
       status: 'inactive',
       uptime: 0,
       points: 0,
@@ -185,13 +186,13 @@ export async function getNodesByWallet(wallet: string): Promise<ExplorerNode[]> 
     if (!Array.isArray(data)) return [];
     return data.map((n: any) => ({
       rank: 0,
-      nodeId: n.ID || n.id || n.node_id,
-      walletAddress: n.WalletAddress || n.wallet_address,
-      nodeType: n.NodeType || n.node_type,
-      totalPoints: n.TotalPoints || n.total_points || 0,
-      totalUptimeHours: (n.TotalUptimeMinutes || 0) / 60,
+      nodeId: n.id ?? '',
+      walletAddress: n.wallet_address ?? '',
+      nodeType: n.node_type,
+      totalPoints: n.total_points ?? 0,
+      totalUptimeHours: (n.total_uptime_minutes ?? 0) / 60,
       challengePassRate: 0,
-      registeredAt: n.RegisteredAt || n.registered_at || 0,
+      registeredAt: n.registered_at ?? 0,
     }));
   } catch (error) {
     console.error('Error fetching nodes by wallet:', error);

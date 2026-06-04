@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from './ui/sheet';
 
 const LANGUAGES = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
@@ -215,6 +215,8 @@ export function AppHeader() {
               </button>
             </SheetTrigger>
             <SheetContent side="right" className="bg-card border-border w-[280px] sm:w-[350px]">
+              <SheetTitle className="sr-only">Navigation menu</SheetTitle>
+              <SheetDescription className="sr-only">Site navigation links</SheetDescription>
               <nav className="flex flex-col gap-4 mt-8">
                 <Link
                   to="/how-it-works"
