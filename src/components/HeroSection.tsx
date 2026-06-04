@@ -7,7 +7,7 @@ export function HeroSection() {
     <BackgroundPaths
       className="min-h-[28rem] md:min-h-[36rem] h-auto w-full overflow-hidden"
       svgClassName="translate-x-[4%] sm:translate-x-[6%] md:translate-x-[8%] lg:translate-x-[10%]"
-      svgOptions={{ duration: 6 }}
+      svgOptions={{ duration: 33 }}
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20">
         <div className="max-w-xl">

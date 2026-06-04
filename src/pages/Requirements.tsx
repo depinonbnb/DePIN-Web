@@ -8,7 +8,7 @@ export function Requirements() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">System Requirements</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">System Requirements</h1>
           <p className="text-muted-foreground">
             Hardware requirements for running BNB Chain nodes. Choose a node type based on your available resources.
           </p>
@@ -258,7 +258,7 @@ export function Requirements() {
         </div>
 
         {/* Verification Types */}
-        <Card className="bg-card border-border p-8 mb-8">
+        <Card className="bg-card border-border p-6 sm:p-8 mb-8">
           <h2 className="text-2xl font-bold text-foreground mb-6">Verification Types by Node</h2>
 
           <div className="overflow-x-auto">
@@ -318,7 +318,7 @@ export function Requirements() {
         </Card>
 
         {/* Getting Started */}
-        <Card className="bg-card border-border p-8 mb-8">
+        <Card className="bg-card border-border p-6 sm:p-8 mb-8">
           <h2 className="text-2xl font-bold text-foreground mb-6">Getting Started</h2>
 
           <div className="space-y-6">
@@ -331,7 +331,7 @@ export function Requirements() {
                 <p className="text-sm text-muted-foreground mb-3">
                   Download and run BSC or opBNB node software. Wait for full sync before registering.
                 </p>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   <Button size="sm" variant="outline" asChild>
                     <a href="https://github.com/bnb-chain/bsc" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
                       <Download className="w-4 h-4" />

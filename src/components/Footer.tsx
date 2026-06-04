@@ -21,7 +21,7 @@ function Company() {
 
 function Nav() {
   return (
-    <nav className="box-border content-stretch flex font-medium gap-8 items-start leading-none overflow-visible p-0 relative shrink-0 text-base text-muted-foreground text-nowrap" data-name="Nav">
+    <nav className="box-border content-stretch flex flex-wrap justify-center md:flex-nowrap font-medium gap-x-6 gap-y-3 md:gap-8 items-start leading-none overflow-visible p-0 relative shrink-0 text-base text-muted-foreground text-nowrap" data-name="Nav">
       <Link to="/" className="flex flex-col justify-center relative shrink-0 hover:text-primary transition-colors">
         <p className="whitespace-pre">Home</p>
       </Link>
@@ -49,7 +49,7 @@ function Nav() {
 
 function Text() {
   return (
-    <div className="content-stretch flex gap-12 items-center justify-center relative shrink-0" data-name="Text">
+    <div className="content-stretch flex flex-col md:flex-row gap-6 md:gap-12 items-center justify-center relative shrink-0" data-name="Text">
       <Company />
       <Nav />
     </div>
@@ -96,14 +96,14 @@ export default function Footer() {
     <footer className="relative w-full bg-card border-t border-border mt-auto" data-name="Footer">
       <div className="flex flex-col items-center w-full">
         {/* Main Footer Content */}
-        <div className="box-border content-stretch flex items-center justify-between px-16 py-8 relative w-full max-w-7xl mx-auto">
+        <div className="box-border content-stretch flex flex-col md:flex-row gap-6 md:gap-0 items-center justify-between px-6 sm:px-10 lg:px-16 py-8 relative w-full max-w-7xl mx-auto">
           <Text />
           <SocialLinks />
         </div>
         
         {/* Copyright Section */}
         <div className="w-full border-t border-border/50">
-          <div className="flex items-center justify-center px-16 py-4 max-w-7xl mx-auto">
+          <div className="flex items-center justify-center text-center px-6 sm:px-10 lg:px-16 py-4 max-w-7xl mx-auto">
             <Copyright />
           </div>
         </div>

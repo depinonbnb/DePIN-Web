@@ -56,42 +56,6 @@ export function GetStarted() {
             </div>
           ))}
         </div>
-
-        {/* Mobile mockup on the right */}
-        <div className="mt-12 sm:mt-16 flex justify-center lg:justify-end">
-          <div className="w-56 h-80 sm:w-64 sm:h-96 bg-card border border-border rounded-3xl shadow-2xl overflow-hidden">
-            <div className="p-4 border-b border-border flex items-center justify-between">
-              <span className="text-xs text-muted-foreground">9:41</span>
-              <span className="text-xs text-muted-foreground">100%</span>
-            </div>
-            <div className="p-4">
-              <div className="flex items-center gap-2 mb-6">
-                <div className="w-8 h-8 bg-primary rounded-full" />
-                <span className="text-primary">DePIN</span>
-              </div>
-              <div className="space-y-4">
-                <div className="bg-muted rounded-lg p-3">
-                  <div className="text-xs text-muted-foreground mb-1">Total Nodes</div>
-                  <div className="text-foreground text-2xl">12,458</div>
-                </div>
-                <div className="bg-muted rounded-lg p-3">
-                  <div className="text-xs text-muted-foreground mb-1">Your Points</div>
-                  <div className="text-accent text-2xl">245,000</div>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="bg-muted rounded-lg p-3">
-                    <div className="text-xs text-muted-foreground mb-1">Uptime</div>
-                    <div className="text-foreground">99.9%</div>
-                  </div>
-                  <div className="bg-muted rounded-lg p-3">
-                    <div className="text-xs text-muted-foreground mb-1">Rank</div>
-                    <div className="text-primary">#42</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );

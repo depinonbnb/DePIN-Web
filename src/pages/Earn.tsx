@@ -51,7 +51,7 @@ export function Earn() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Earn</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">Earn</h1>
           <p className="text-muted-foreground">
             Earn points by proving you run real BNB nodes through automatic verification. Points are awarded for registration, uptime, and successful verifications.
           </p>
@@ -121,7 +121,7 @@ export function Earn() {
         {/* User Earnings Section */}
         {address ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20 p-8">
+            <Card className="bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20 p-6 sm:p-8">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center">
                   <TrendingUp className="w-8 h-8 text-primary" />
@@ -151,7 +151,7 @@ export function Earn() {
               </div>
             </Card>
 
-            <Card className="bg-gradient-to-br from-accent/5 to-accent/10 border-accent/20 p-8">
+            <Card className="bg-gradient-to-br from-accent/5 to-accent/10 border-accent/20 p-6 sm:p-8">
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center">
                   <Award className="w-8 h-8 text-accent" />
@@ -180,7 +180,7 @@ export function Earn() {
             </Card>
           </div>
         ) : (
-          <Card className="bg-card border-border p-12 text-center mb-8">
+          <Card className="bg-card border-border p-6 sm:p-12 text-center mb-8">
             <div className="max-w-md mx-auto">
               <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
                 <Wallet className="w-10 h-10 text-primary" />
@@ -194,7 +194,7 @@ export function Earn() {
         )}
 
         {/* Points System */}
-        <Card className="bg-card border-border p-8 mb-8">
+        <Card className="bg-card border-border p-6 sm:p-8 mb-8">
           <h2 className="text-2xl font-bold text-foreground mb-6">Points System</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -255,7 +255,7 @@ export function Earn() {
         </Card>
 
         {/* How It Works */}
-        <Card className="bg-card border-border p-8">
+        <Card className="bg-card border-border p-6 sm:p-8">
           <h2 className="text-2xl font-bold text-foreground mb-6">How to Earn Points</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-3">
