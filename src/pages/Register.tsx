@@ -553,7 +553,7 @@ function SuccessCard({ nodeId, walletAddress, nodeType, verificationMethod, txHa
                 {copied ? 'copied' : 'copy'}
               </Button>
             </div>
-            <pre className="bg-[#1a1a2e] text-[#e0e0e0] rounded-lg p-4 text-xs font-mono overflow-x-auto whitespace-pre leading-relaxed">
+            <pre className="bg-muted text-foreground rounded-lg p-4 text-xs font-mono overflow-x-auto whitespace-pre leading-relaxed">
               {cliConfig}
             </pre>
             <p className="text-xs text-muted-foreground mt-2">

@@ -111,7 +111,7 @@ export function AppHeader() {
   };
 
   return (
-    <header className="w-full bg-[#181A20] border-b border-border">
+    <header className="w-full bg-background border-b border-border">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4 sm:gap-8">
           <Link to="/" className="flex items-center gap-2">
@@ -123,7 +123,7 @@ export function AppHeader() {
                 style={{ imageRendering: 'crisp-edges' }}
               />
             </div>
-            <span className="text-primary text-lg sm:text-xl font-semibold">BNB DePIN</span>
+            <span className="font-heading text-primary text-lg sm:text-xl font-semibold">BNB DePIN</span>
           </Link>
           
           {/* Desktop Navigation */}

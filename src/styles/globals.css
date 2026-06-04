@@ -6,25 +6,26 @@
 
 :root {
   --font-size: 16px;
-  --background: 210 11% 15%;
-  --foreground: 210 17% 98%;
-  --card: 210 9% 31%;
-  --card-foreground: 210 17% 98%;
-  --popover: 210 9% 31%;
-  --popover-foreground: 210 17% 98%;
+  --background: 0 0% 0%;
+  --foreground: 0 0% 93%;
+  --card: 0 0% 4%;
+  --card-foreground: 0 0% 93%;
+  --popover: 0 0% 4%;
+  --popover-foreground: 0 0% 93%;
   --primary: 45 94% 47%;
-  --primary-foreground: 210 11% 15%;
+  --primary-foreground: 0 0% 0%;
   --primary-hover: 45 92% 45%;
-  --secondary: 210 9% 31%;
-  --secondary-foreground: 210 17% 98%;
-  --muted: 210 9% 31%;
-  --muted-foreground: 210 8% 58%;
-  --accent: 158 78% 45%;
-  --accent-foreground: 0 0% 100%;
+  --secondary: 0 0% 9%;
+  --secondary-foreground: 0 0% 93%;
+  --muted: 0 0% 9%;
+  --muted-foreground: 0 0% 55%;
+  --accent: 48 96% 53%;
+  --accent-foreground: 0 0% 0%;
   --destructive: 355 78% 63%;
   --destructive-foreground: 0 0% 100%;
-  --border: 210 9% 31%;
-  --input: 210 9% 31%;
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --input-background: 0 0% 0%;
   --ring: 45 94% 47%;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
@@ -33,25 +34,26 @@
 }
 
 .dark {
-  --background: 210 11% 15%;
-  --foreground: 210 17% 98%;
-  --card: 210 9% 31%;
-  --card-foreground: 210 17% 98%;
-  --popover: 210 9% 31%;
-  --popover-foreground: 210 17% 98%;
+  --background: 0 0% 0%;
+  --foreground: 0 0% 93%;
+  --card: 0 0% 4%;
+  --card-foreground: 0 0% 93%;
+  --popover: 0 0% 4%;
+  --popover-foreground: 0 0% 93%;
   --primary: 45 94% 47%;
-  --primary-foreground: 210 11% 15%;
+  --primary-foreground: 0 0% 0%;
   --primary-hover: 45 92% 45%;
-  --secondary: 210 9% 31%;
-  --secondary-foreground: 210 17% 98%;
-  --muted: 210 9% 31%;
-  --muted-foreground: 210 8% 58%;
-  --accent: 158 78% 45%;
-  --accent-foreground: 0 0% 100%;
+  --secondary: 0 0% 9%;
+  --secondary-foreground: 0 0% 93%;
+  --muted: 0 0% 9%;
+  --muted-foreground: 0 0% 55%;
+  --accent: 48 96% 53%;
+  --accent-foreground: 0 0% 0%;
   --destructive: 355 78% 63%;
   --destructive-foreground: 0 0% 100%;
-  --border: 210 9% 31%;
-  --input: 210 9% 31%;
+  --border: 0 0% 15%;
+  --input: 0 0% 15%;
+  --input-background: 0 0% 0%;
   --ring: 45 94% 47%;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
@@ -64,8 +66,23 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading;
+  }
+
+  code,
+  pre,
+  kbd,
+  samp {
+    @apply font-mono;
   }
 }
 

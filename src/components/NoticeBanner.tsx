@@ -2,7 +2,7 @@ import { AlertTriangle } from 'lucide-react';
 
 export function NoticeBanner() {
   return (
-    <div className="w-full bg-[#2B3139] border-t border-b border-border">
+    <div className="w-full bg-muted/50 border-t border-b border-border">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-3 sm:py-4">
         <div className="flex items-start gap-2 sm:gap-3">
           <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-warning flex-shrink-0 mt-0.5" />

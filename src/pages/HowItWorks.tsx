@@ -129,6 +129,30 @@ function toneClasses(tone: NodeSpec['tone']) {
   }
 }
 
+function tierBadgeClasses(tier: string): string {
+  const label = tier.toLowerCase();
+  if (label.includes('highest')) {
+    return 'border-primary/40 bg-primary/15 text-primary';
+  }
+  if (label.includes('high')) {
+    return 'border-primary/30 bg-primary/10 text-primary';
+  }
+  if (label.includes('medium')) {
+    return 'border-border bg-muted text-muted-foreground';
+  }
+  return 'border-border bg-background text-muted-foreground';
+}
+
+function RewardTierBadge({ tier }: { tier: string }) {
+  return (
+    <span
+      className={`inline-flex items-center justify-center rounded-full border px-2.5 py-1 text-xs font-medium leading-none whitespace-nowrap ${tierBadgeClasses(tier)}`}
+    >
+      {tier}
+    </span>
+  );
+}
+
 export function HowItWorks() {
   return (
     <div className="min-h-screen bg-background">
@@ -269,18 +293,14 @@ export function HowItWorks() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                      {NODE_SPECS.map((n) => {
-                        const tc = toneClasses(n.tone);
-                        return (
+                      {NODE_SPECS.map((n) => (
                           <tr key={n.id} className="hover:bg-muted/30 transition-colors">
                             <td className="py-4 px-4">
                               <div className="font-medium text-foreground">{n.name}</div>
                               <div className="text-xs text-muted-foreground mt-0.5">{n.description}</div>
                             </td>
-                            <td className="py-4 px-4">
-                              <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs ${tc.bg} ${tc.text}`}>
-                                {n.tier}
-                              </span>
+                            <td className="py-4 px-4 whitespace-nowrap">
+                              <RewardTierBadge tier={n.tier} />
                             </td>
                             <td className="py-4 px-4 text-foreground">{n.storage}</td>
                             <td className="py-4 px-4 text-foreground">{n.ram}</td>
@@ -290,8 +310,7 @@ export function HowItWorks() {
                               <span className="text-xs text-muted-foreground ml-1">pts</span>
                             </td>
                           </tr>
-                        );
-                      })}
+                      ))}
                     </tbody>
                   </table>
                 </div>
@@ -318,9 +337,11 @@ export function HowItWorks() {
                         <div className={`w-9 h-9 rounded-lg ${tc.bg} flex items-center justify-center`}>
                           {n.tone === 'accent' ? <Database className={`w-4 h-4 ${tc.text}`} /> : <Server className={`w-4 h-4 ${tc.text}`} />}
                         </div>
-                        <div>
+                        <div className="min-w-0 flex-1">
                           <h3 className="font-semibold text-foreground leading-tight">{n.name}</h3>
-                          <p className={`text-xs ${tc.text}`}>{n.tier}</p>
+                          <div className="mt-1.5">
+                            <RewardTierBadge tier={n.tier} />
+                          </div>
                         </div>
                       </div>
 
