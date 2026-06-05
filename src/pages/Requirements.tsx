@@ -1,5 +1,5 @@
 import { Card } from '../components/ui/card';
-import { Cpu, HardDrive, Wifi, Monitor, Download, ExternalLink, Server, Database } from 'lucide-react';
+import { Cpu, HardDrive, Wifi, Monitor, Download, ExternalLink, Server, Database, Terminal } from 'lucide-react';
 import { Button } from '../components/ui/button';
 
 export function Requirements() {
@@ -357,10 +357,11 @@ export function Requirements() {
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-foreground mb-2">Register Your Node</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Connect your wallet and register your node type. Sign the registration message to prove ownership.
+                  Registration happens from your terminal. The prover signs a message with your wallet
+                  key and registers your node automatically — no signature pop-ups, no node exposed.
                 </p>
                 <Button size="sm" asChild>
-                  <a href="/register">Register Node</a>
+                  <a href="/register">Registration guide</a>
                 </Button>
               </div>
             </div>
@@ -370,22 +371,24 @@ export function Requirements() {
                 <span className="text-primary font-bold">3</span>
               </div>
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-foreground mb-2">Download & Run Prover CLI</h3>
+                <h3 className="text-lg font-semibold text-foreground mb-2">Build & Run the Prover</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Install the prover software and configure it with your node's RPC endpoint. It handles verifications automatically.
+                  The prover is open source — build it from source, point it at your node's RPC, and it
+                  registers and handles verifications automatically. Full commands are in the guide.
                 </p>
                 <div className="flex gap-2 flex-wrap">
-                  <Button size="sm" variant="outline" disabled>
-                    <Download className="w-4 h-4 mr-2" />
-                    Windows (Coming Soon)
+                  <Button size="sm" variant="outline" asChild>
+                    <a href="https://github.com/depinonbnb/DePIN" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2">
+                      <Download className="w-4 h-4" />
+                      Prover source
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
                   </Button>
-                  <Button size="sm" variant="outline" disabled>
-                    <Download className="w-4 h-4 mr-2" />
-                    macOS (Coming Soon)
-                  </Button>
-                  <Button size="sm" variant="outline" disabled>
-                    <Download className="w-4 h-4 mr-2" />
-                    Linux (Coming Soon)
+                  <Button size="sm" asChild>
+                    <a href="/register" className="inline-flex items-center gap-2">
+                      <Terminal className="w-4 h-4" />
+                      Terminal guide
+                    </a>
                   </Button>
                 </div>
               </div>
