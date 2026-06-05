@@ -154,6 +154,16 @@ export interface ExplorerNode {
   totalUptimeHours: number;
   challengePassRate: number;
   registeredAt: number;
+  isSynced: boolean;
+  lastHeartbeatAt: number;
+}
+
+// Derives a display sync status from the raw flags.
+export type SyncStatus = 'synced' | 'syncing' | 'pending';
+export function syncStatusOf(node: { isSynced: boolean; lastHeartbeatAt: number }): SyncStatus {
+  if (node.isSynced) return 'synced';
+  if (node.lastHeartbeatAt > 0) return 'syncing';
+  return 'pending';
 }
 
 // GET /api/leaderboard — returns all active non-banned nodes (max 100, sorted by points desc)
@@ -171,6 +181,8 @@ export async function getExplorerNodes(): Promise<ExplorerNode[]> {
       totalUptimeHours: n.total_uptime_hours ?? 0,
       challengePassRate: n.challenge_pass_rate ?? 0,
       registeredAt: n.registered_at ?? 0,
+      isSynced: n.is_synced ?? false,
+      lastHeartbeatAt: n.last_heartbeat_at ?? 0,
     }));
   } catch (error) {
     console.error('Error fetching explorer nodes:', error);
@@ -193,6 +205,8 @@ export async function getNodesByWallet(wallet: string): Promise<ExplorerNode[]> 
       totalUptimeHours: (n.total_uptime_minutes ?? 0) / 60,
       challengePassRate: 0,
       registeredAt: n.registered_at ?? 0,
+      isSynced: n.is_synced ?? false,
+      lastHeartbeatAt: n.last_heartbeat_at ?? 0,
     }));
   } catch (error) {
     console.error('Error fetching nodes by wallet:', error);

@@ -14,6 +14,7 @@ import {
   getExplorerNodes,
   getNodesByWallet,
   getNetworkStats,
+  syncStatusOf,
   NODE_TYPES,
   type ExplorerNode,
   type NetworkStats,
@@ -233,6 +234,21 @@ function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string
   );
 }
 
+function SyncBadge({ node }: { node: ExplorerNode }) {
+  const status = syncStatusOf(node);
+  const meta = {
+    synced: { dot: 'bg-accent', text: 'text-accent', label: 'Synced', pulse: false },
+    syncing: { dot: 'bg-warning', text: 'text-warning', label: 'Syncing', pulse: true },
+    pending: { dot: 'bg-muted-foreground', text: 'text-muted-foreground', label: 'Pending', pulse: false },
+  }[status];
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <span className={`w-2 h-2 rounded-full ${meta.dot} ${meta.pulse ? 'animate-pulse' : ''}`} />
+      <span className={`text-xs ${meta.text}`}>{meta.label}</span>
+    </span>
+  );
+}
+
 function NodeRow({ node, expanded, onToggle }: { node: ExplorerNode; expanded: boolean; onToggle: () => void }) {
   const typeMeta = NODE_TYPES.find((t) => t.value === node.nodeType);
 
@@ -245,7 +261,10 @@ function NodeRow({ node, expanded, onToggle }: { node: ExplorerNode; expanded: b
         {/* desktop layout */}
         <div className="hidden md:grid grid-cols-[60px_1fr_1fr_120px_100px_100px_40px] gap-2 items-center w-full">
           <div className="text-sm text-muted-foreground">{node.rank || '—'}</div>
-          <div className="text-sm font-mono text-foreground truncate">{node.nodeId}</div>
+          <div className="text-sm font-mono text-foreground truncate">
+            {node.nodeId}
+            <div className="mt-0.5"><SyncBadge node={node} /></div>
+          </div>
           <div className="text-sm font-mono text-muted-foreground truncate">{truncateAddress(node.walletAddress)}</div>
           <div>
             <Badge variant="outline" className="text-xs">
@@ -264,6 +283,7 @@ function NodeRow({ node, expanded, onToggle }: { node: ExplorerNode; expanded: b
           <div>
             <div className="text-sm font-mono text-foreground">{node.nodeId}</div>
             <div className="text-xs text-muted-foreground">{truncateAddress(node.walletAddress)}</div>
+            <div className="mt-1"><SyncBadge node={node} /></div>
           </div>
           <div className="text-right">
             <div className="text-sm font-medium text-primary">{node.totalPoints.toLocaleString()} pts</div>
