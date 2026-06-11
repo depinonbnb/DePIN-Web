@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Terminal, Copy, CheckCircle, ExternalLink, Wallet, Server, Cpu, ArrowRight } from 'lucide-react';
+import { Terminal, Copy, CheckCircle, ExternalLink, Wallet, Server, Cpu, ArrowRight, Coins, Clock } from 'lucide-react';
 
 const API_BASE = (import.meta.env.VITE_API_URL as string | undefined) || 'https://api.depinonbnb.com/api';
 const BACKEND_REPO = 'https://github.com/depinonbnb/DePIN';
@@ -80,6 +80,37 @@ export function Register() {
           </Link>{' '}
           first, then work through the steps below.
         </p>
+
+        <Card className="bg-primary/5 border-primary/20 p-5 sm:p-6 mb-8">
+          <div className="flex items-start gap-3 mb-5">
+            <Coins className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="text-foreground font-medium mb-1">Hold 1,000,000 tokens to earn</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Your wallet must hold at least{' '}
+                <span className="text-foreground font-medium">1,000,000 tokens</span> before you
+                register. This is re-checked <span className="text-foreground font-medium">every reward
+                cycle</span>: if your balance falls below 1,000,000, your node stays registered but
+                stops accruing points until you top back up. No points are awarded for any cycle in
+                which you hold less than the minimum.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <Clock className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+            <div>
+              <h3 className="text-foreground font-medium mb-1">Give it time after registering</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Registration isn&apos;t instant — it typically takes{' '}
+                <span className="text-foreground font-medium">5 to 120 minutes</span> to confirm.
+                After that, your node still has to <span className="text-foreground font-medium">fully
+                sync</span> with BNB Chain before it can answer challenges, which can take anywhere
+                from a few hours to a day or more depending on the node type and your hardware. You
+                only start earning once the node is fully synced.
+              </p>
+            </div>
+          </div>
+        </Card>
 
         <div className="space-y-5">
           <Step number={1} icon={Wallet} title="Create a BNB wallet">
