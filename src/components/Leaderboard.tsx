@@ -2,6 +2,14 @@ import { useEffect, useState } from 'react';
 import { getLeaderboard, LeaderboardNode } from '../lib/api';
 import { Trophy, Medal, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
 
+// Format hours-as-float into "Xh Ym" (or "Ym" under an hour).
+function formatUptime(hours: number): string {
+  const totalMin = Math.round((hours || 0) * 60);
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  return h > 0 ? `${h}h ${m}m` : `${m}m`;
+}
+
 export function Leaderboard() {
   const [nodes, setNodes] = useState<LeaderboardNode[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,7 +64,7 @@ export function Leaderboard() {
                   <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-foreground text-sm sm:text-base">Rank</th>
                   <th className="px-4 sm:px-6 py-3 sm:py-4 text-left text-foreground text-sm sm:text-base">Address</th>
                   <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Verifications</th>
-                  <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Uptime (hrs)</th>
+                  <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Uptime</th>
                   <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Anti-Cheat</th>
                   <th className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">Points</th>
                 </tr>
@@ -72,7 +80,7 @@ export function Leaderboard() {
                     <td className="px-4 sm:px-6 py-3 sm:py-4 font-mono text-foreground text-sm sm:text-base">{node.address}</td>
                     <td className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">{node.verificationsPassed.toLocaleString()}</td>
                     <td className="px-4 sm:px-6 py-3 sm:py-4 text-right">
-                      <span className="text-accent text-sm sm:text-base">{node.uptimeHours.toLocaleString()}</span>
+                      <span className="text-accent text-sm sm:text-base">{formatUptime(node.uptimeHours)}</span>
                     </td>
                     <td className="px-4 sm:px-6 py-3 sm:py-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">

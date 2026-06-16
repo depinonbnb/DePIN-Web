@@ -1,6 +1,52 @@
 import type { ethers } from 'ethers';
+import { formatEther } from 'ethers';
+import { REWARD_VAULT_ADDRESS } from './contracts';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
+
+// A payout: an outgoing BNB transfer from the rewards vault to a node operator.
+export interface Payout {
+  to: string;
+  valueBnb: string;
+  timestamp: number; // ms
+  hash: string;
+}
+
+// getVaultPayouts lists recent outgoing BNB transfers from the rewards vault via
+// the Etherscan V2 API (chainid 56 = BSC mainnet). Requires VITE_BSCSCAN_API_KEY
+// (a free key from etherscan.io). Returns [] when the key is unset or on error.
+export async function getVaultPayouts(limit = 10): Promise<Payout[]> {
+  const key = import.meta.env.VITE_BSCSCAN_API_KEY as string | undefined;
+  if (!key) return [];
+
+  const vault = REWARD_VAULT_ADDRESS.toLowerCase();
+  const url =
+    `https://api.etherscan.io/v2/api?chainid=56&module=account&action=txlist` +
+    `&address=${vault}&startblock=0&endblock=99999999&page=1&offset=50&sort=desc&apikey=${key}`;
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.status !== '1' || !Array.isArray(data.result)) return [];
+
+    return data.result
+      .filter(
+        (tx: any) =>
+          tx.from?.toLowerCase() === vault && tx.value !== '0' && tx.isError === '0'
+      )
+      .slice(0, limit)
+      .map((tx: any) => ({
+        to: tx.to,
+        valueBnb: parseFloat(formatEther(tx.value)).toLocaleString(undefined, {
+          maximumFractionDigits: 4,
+        }),
+        timestamp: Number(tx.timeStamp) * 1000,
+        hash: tx.hash,
+      }));
+  } catch {
+    return [];
+  }
+}
 
 // must match backend internal/types/types.go
 export type NodeType =
