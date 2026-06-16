@@ -54,9 +54,19 @@ export function Payouts() {
             ))}
           </div>
         ) : payouts.length === 0 ? (
-          <div className="p-8 text-center text-muted-foreground text-sm">
-            No payouts yet — the pool is still filling. Every payout will show up here, live and
-            verifiable on-chain.
+          <div className="p-8 text-center">
+            <p className="text-muted-foreground text-sm mb-4">
+              Every payout to a node operator is sent from the public vault — fully transparent and
+              verifiable on-chain. View the complete, live payout history on BscScan.
+            </p>
+            <a
+              href={`https://bscscan.com/address/${REWARD_VAULT_ADDRESS}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 bg-primary text-primary-foreground px-4 py-2 rounded text-sm font-medium hover:opacity-90 transition-opacity"
+            >
+              View payouts on BscScan <ExternalLink className="w-3.5 h-3.5" />
+            </a>
           </div>
         ) : (
           <div className="divide-y divide-border">
