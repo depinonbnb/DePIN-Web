@@ -15,37 +15,57 @@ export interface Payout {
 // getVaultPayouts lists recent outgoing BNB transfers from the rewards vault via
 // the Etherscan V2 API (chainid 56 = BSC mainnet). Requires VITE_BSCSCAN_API_KEY
 // (a free key from etherscan.io). Returns [] when the key is unset or on error.
-export async function getVaultPayouts(limit = 10): Promise<Payout[]> {
+export async function getVaultPayouts(limit = 12): Promise<Payout[]> {
   const key = import.meta.env.VITE_BSCSCAN_API_KEY as string | undefined;
   if (!key) return [];
 
   const vault = REWARD_VAULT_ADDRESS.toLowerCase();
-  const url =
-    `https://api.etherscan.io/v2/api?chainid=56&module=account&action=txlist` +
-    `&address=${vault}&startblock=0&endblock=99999999&page=1&offset=50&sort=desc&apikey=${key}`;
+  const base =
+    `https://api.etherscan.io/v2/api?chainid=56&address=${vault}` +
+    `&startblock=0&endblock=99999999&page=1&offset=100&sort=desc&apikey=${key}`;
 
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
-    if (data.status !== '1' || !Array.isArray(data.result)) return [];
+  // Pull both normal native transfers (txlist) and contract-routed internal
+  // transfers (txlistinternal) so every BNB that leaves the vault shows up.
+  const fetchList = async (action: string): Promise<any[]> => {
+    try {
+      const res = await fetch(`${base}&module=account&action=${action}`);
+      const data = await res.json();
+      return data.status === '1' && Array.isArray(data.result) ? data.result : [];
+    } catch {
+      return [];
+    }
+  };
 
-    return data.result
-      .filter(
-        (tx: any) =>
-          tx.from?.toLowerCase() === vault && tx.value !== '0' && tx.isError === '0'
-      )
-      .slice(0, limit)
-      .map((tx: any) => ({
-        to: tx.to,
-        valueBnb: parseFloat(formatEther(tx.value)).toLocaleString(undefined, {
-          maximumFractionDigits: 4,
-        }),
-        timestamp: Number(tx.timeStamp) * 1000,
-        hash: tx.hash,
-      }));
-  } catch {
-    return [];
-  }
+  const [normal, internal] = await Promise.all([
+    fetchList('txlist'),
+    fetchList('txlistinternal'),
+  ]);
+
+  const seen = new Set<string>();
+  return [...normal, ...internal]
+    .filter(
+      (tx: any) =>
+        tx.from?.toLowerCase() === vault &&
+        tx.value &&
+        tx.value !== '0' &&
+        (tx.isError === undefined || tx.isError === '0')
+    )
+    .map((tx: any) => ({
+      to: tx.to,
+      valueBnb: parseFloat(formatEther(tx.value)).toLocaleString(undefined, {
+        maximumFractionDigits: 4,
+      }),
+      timestamp: Number(tx.timeStamp) * 1000,
+      hash: tx.hash,
+    }))
+    .filter((p: Payout) => {
+      const k = `${p.hash}-${p.to}-${p.valueBnb}`;
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    })
+    .sort((a: Payout, b: Payout) => b.timestamp - a.timestamp)
+    .slice(0, limit);
 }
 
 // must match backend internal/types/types.go
