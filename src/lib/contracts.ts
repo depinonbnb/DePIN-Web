@@ -12,6 +12,10 @@ export const TOKEN_CONTRACT_ADDRESS = import.meta.env.VITE_TOKEN_CONTRACT_ADDRES
 export const TOKEN_SYMBOL = 'DEPIN';
 export const TOKEN_DECIMALS = 18;
 
+// Public rewards vault (BSC mainnet) — trading-tax revenue collects here and is
+// paid out to active node operators. Public so anyone can verify the pool.
+export const REWARD_VAULT_ADDRESS = import.meta.env.VITE_REWARD_VAULT_ADDRESS || '0xf4b46fb7b4022cef21096796889412c6ffda1c5f';
+
 export const NETWORK_ID = parseInt(import.meta.env.VITE_NETWORK_ID || '56'); // BNB Smart Chain (mainnet)
 
 // Network configuration (BNB Smart Chain mainnet)
