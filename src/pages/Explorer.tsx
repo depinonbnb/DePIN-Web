@@ -308,7 +308,7 @@ function NodeRow({ node, expanded, onToggle }: { node: ExplorerNode; expanded: b
             </div>
             <div>
               <div className="text-muted-foreground text-xs mb-0.5">Challenge Pass Rate</div>
-              <div className="text-foreground">{(node.challengePassRate * 100).toFixed(1)}%</div>
+              <div className="text-foreground">{node.challengePassRate.toFixed(1)}%</div>
             </div>
             <div>
               <div className="text-muted-foreground text-xs mb-0.5">Registered</div>
