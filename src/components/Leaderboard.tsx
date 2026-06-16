@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getLeaderboard, LeaderboardNode } from '../lib/api';
-import { Trophy, Medal, CheckCircle, AlertTriangle, XCircle } from 'lucide-react';
+import { Trophy, Medal, CheckCircle, AlertTriangle, XCircle, Ban } from 'lucide-react';
 
 // Format hours-as-float into "Xh Ym" (or "Ym" under an hour).
 function formatUptime(hours: number): string {
@@ -36,6 +36,8 @@ export function Leaderboard() {
         return <AlertTriangle className="w-4 h-4 text-warning" />;
       case 'Flagged':
         return <XCircle className="w-4 h-4 text-destructive" />;
+      case 'Blocked':
+        return <Ban className="w-4 h-4 text-destructive" />;
       default:
         return <CheckCircle className="w-4 h-4 text-accent" />;
     }
@@ -85,12 +87,17 @@ export function Leaderboard() {
                     <td className="px-4 sm:px-6 py-3 sm:py-4 text-right">
                       <div className="flex items-center justify-end gap-1.5">
                         {getAntiCheatIcon(node.antiCheatStatus)}
-                        <span className={`text-sm sm:text-base ${
+                        <span title={node.cheatReason || undefined} className={`text-sm sm:text-base ${
                           node.antiCheatStatus === 'Clean' ? 'text-accent' :
                           node.antiCheatStatus === 'Warning' ? 'text-warning' :
                           'text-destructive'
                         }`}>{node.antiCheatStatus}</span>
                       </div>
+                      {node.antiCheatStatus === 'Blocked' && node.cheatReason && (
+                        <div className="text-xs text-destructive/80 mt-1 max-w-[240px] ml-auto leading-snug">
+                          This node was blocked — {node.cheatReason}
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 sm:px-6 py-3 sm:py-4 text-right text-foreground text-sm sm:text-base">{node.points.toLocaleString()}</td>
                   </tr>

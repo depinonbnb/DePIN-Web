@@ -112,7 +112,8 @@ export interface LeaderboardNode {
   address: string;
   verificationsPassed: number;
   uptimeHours: number;
-  antiCheatStatus: 'Clean' | 'Warning' | 'Flagged';
+  antiCheatStatus: 'Clean' | 'Warning' | 'Flagged' | 'Blocked';
+  cheatReason: string;
   points: number;
 }
 
@@ -152,12 +153,14 @@ export async function getNetworkStats(): Promise<NetworkStats> {
   }
 }
 
-function mapCheatStatus(status: unknown): 'Clean' | 'Warning' | 'Flagged' {
+function mapCheatStatus(status: unknown): 'Clean' | 'Warning' | 'Flagged' | 'Blocked' {
   switch (status) {
     case 'warning':
       return 'Warning';
     case 'flagged':
       return 'Flagged';
+    case 'banned':
+      return 'Blocked';
     default:
       return 'Clean';
   }
@@ -177,6 +180,7 @@ export async function getLeaderboard(): Promise<LeaderboardNode[]> {
       verificationsPassed: node.total_challenges_passed ?? 0,
       uptimeHours: node.total_uptime_hours ?? 0,
       antiCheatStatus: mapCheatStatus(node.cheat_status),
+      cheatReason: node.cheat_reason ?? '',
       points: node.total_points ?? 0,
     }));
   } catch (error) {
