@@ -6,19 +6,25 @@ import DePINPointsABI from '../contracts/DePINPoints.json';
 // Contract addresses (update these after deployment)
 export const STAKING_CONTRACT_ADDRESS = import.meta.env.VITE_STAKING_CONTRACT_ADDRESS || '0x27bBD5698D8Db1335D7A026DEbA260305813a86f';
 export const POINTS_CONTRACT_ADDRESS = import.meta.env.VITE_POINTS_CONTRACT_ADDRESS || '0x04F82418aAEF206e3733fA2eAFe4B8C5E0580e6e';
-export const NETWORK_ID = parseInt(import.meta.env.VITE_NETWORK_ID || '97'); // BSC Testnet
 
-// Network configuration
-export const BSC_TESTNET = {
-  chainId: '0x61', // 97 in hex
-  chainName: 'BSC Testnet',
+// DEPIN token (BSC mainnet) — the token operators must hold to earn rewards.
+export const TOKEN_CONTRACT_ADDRESS = import.meta.env.VITE_TOKEN_CONTRACT_ADDRESS || '0x426326e876ad01fd99db898604c16c0628da7777';
+export const TOKEN_SYMBOL = 'DEPIN';
+export const TOKEN_DECIMALS = 18;
+
+export const NETWORK_ID = parseInt(import.meta.env.VITE_NETWORK_ID || '56'); // BNB Smart Chain (mainnet)
+
+// Network configuration (BNB Smart Chain mainnet)
+export const BSC_MAINNET = {
+  chainId: '0x38', // 56 in hex
+  chainName: 'BNB Smart Chain',
   nativeCurrency: {
     name: 'BNB',
-    symbol: 'tBNB',
+    symbol: 'BNB',
     decimals: 18
   },
-  rpcUrls: ['https://data-seed-prebsc-1-s1.bnbchain.org:8545/'],
-  blockExplorerUrls: ['https://testnet.bscscan.com/']
+  rpcUrls: ['https://bsc-dataseed.binance.org/'],
+  blockExplorerUrls: ['https://bscscan.com/']
 };
 
 // Get contract instances
@@ -47,12 +53,12 @@ export async function checkNetwork(provider: ethers.BrowserProvider): Promise<bo
   }
 }
 
-// Switch to BSC Testnet
-export async function switchToBSCTestnet(): Promise<boolean> {
+// Switch to BNB Smart Chain (mainnet)
+export async function switchToBSCMainnet(): Promise<boolean> {
   try {
     await window.ethereum?.request({
       method: 'wallet_switchEthereumChain',
-      params: [{ chainId: BSC_TESTNET.chainId }],
+      params: [{ chainId: BSC_MAINNET.chainId }],
     });
     return true;
   } catch (switchError: any) {
@@ -61,15 +67,15 @@ export async function switchToBSCTestnet(): Promise<boolean> {
       try {
         await window.ethereum?.request({
           method: 'wallet_addEthereumChain',
-          params: [BSC_TESTNET],
+          params: [BSC_MAINNET],
         });
         return true;
       } catch (addError) {
-        console.error('Error adding BSC Testnet:', addError);
+        console.error('Error adding BNB Smart Chain:', addError);
         return false;
       }
     }
-    console.error('Error switching to BSC Testnet:', switchError);
+    console.error('Error switching to BNB Smart Chain:', switchError);
     return false;
   }
 }

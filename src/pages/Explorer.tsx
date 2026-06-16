@@ -317,7 +317,7 @@ function NodeRow({ node, expanded, onToggle }: { node: ExplorerNode; expanded: b
           </div>
           <div className="mt-3 flex gap-2">
             <a
-              href={`https://testnet.bscscan.com/address/${node.walletAddress}`}
+              href={`https://bscscan.com/address/${node.walletAddress}`}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
