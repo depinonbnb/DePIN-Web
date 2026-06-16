@@ -85,14 +85,16 @@ export function Register() {
           <div className="flex items-start gap-3 mb-5">
             <Coins className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="text-foreground font-medium mb-1">Hold 1,000,000 tokens to earn</h3>
+              <h3 className="text-foreground font-medium mb-1">No tokens to register — 1,000,000 to earn</h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Your wallet must hold at least{' '}
-                <span className="text-foreground font-medium">1,000,000 tokens</span> before you
-                register. This is re-checked <span className="text-foreground font-medium">every reward
-                cycle</span>: if your balance falls below 1,000,000, your node stays registered but
-                stops accruing points until you top back up. No points are awarded for any cycle in
-                which you hold less than the minimum.
+                You don&apos;t need any tokens to register or sync your node — get it online first.
+                The <span className="text-foreground font-medium">1,000,000-token</span> requirement
+                only applies to <span className="text-foreground font-medium">earning</span>: once
+                your node is synced and eligible for rewards, your wallet must hold at least 1,000,000
+                tokens. It&apos;s re-checked <span className="text-foreground font-medium">every reward
+                cycle</span> — if your balance falls below 1,000,000, your node stays registered and
+                online but stops accruing points until you top back up. No points are awarded for any
+                cycle in which you hold less than the minimum.
               </p>
             </div>
           </div>
