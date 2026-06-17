@@ -4,7 +4,8 @@
 > Operators connect a wallet, register a node on BSC Testnet, run the prover CLI, and earn points based on uptime and challenge response quality.
 
 **Stack:** React 18 · TypeScript · Vite 5 · Tailwind 3 · Radix UI · ethers.js 6 · React Router 6
-**Network:** BSC Testnet (chain ID `97`)
+**Network:** BNB Smart Chain mainnet (chain ID `56`)
+**Token:** `DEPIN` · CA `0x426326e876ad01fd99db898604c16c0628da7777` · 18 decimals · [BscScan](https://bscscan.com/token/0x426326e876ad01fd99db898604c16c0628da7777) — operators must hold **1,000,000 DEPIN** to earn
 **Backend:** [`../DePINonBNB/`](../DePINonBNB/) (Go / Gin, listens on `:3000`)
 **Deploy target:** Vercel
 
