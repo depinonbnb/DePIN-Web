@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Globe, Menu, Check } from 'lucide-react';
+import { Globe, Menu, Check, ArrowLeft } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import {
   DropdownMenu,
@@ -31,8 +31,11 @@ export function AppHeader() {
 
   // On the bnbnode subdomain the node home is at "/"; on the apex/www it's at
   // "/bnbnode" (behind the chooser).
-  const nodeHome =
-    typeof window !== 'undefined' && window.location.hostname.startsWith('bnbnode.') ? '/' : '/bnbnode';
+  const onSubdomain =
+    typeof window !== 'undefined' && window.location.hostname.startsWith('bnbnode.');
+  const nodeHome = onSubdomain ? '/' : '/bnbnode';
+  // Link back to the chooser: cross-origin from the subdomain, same-origin "/" on www.
+  const chooserUrl = onSubdomain ? 'https://www.depinonbnb.com/' : '/';
 
   const changeLanguage = (langCode: string) => {
     // Store selected language
@@ -130,7 +133,16 @@ export function AppHeader() {
             </div>
             <span className="font-heading text-primary text-lg sm:text-xl font-semibold">BNB DePIN</span>
           </Link>
-          
+
+          <a
+            href={chooserUrl}
+            className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground border border-border rounded-full px-2.5 sm:px-3 py-1 transition-colors"
+            title="Back to DePIN networks"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Networks</span>
+          </a>
+
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-6">
             <Link
