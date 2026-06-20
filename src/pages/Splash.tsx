@@ -1,5 +1,8 @@
-import { Link } from 'react-router-dom';
 import { Server, Sparkles, ArrowRight } from 'lucide-react';
+
+// The node-hosting site lives on its own subdomain in production; in local dev
+// it's reachable at the /bnbnode path of this same app.
+const NODE_HOSTING_URL = import.meta.env.DEV ? '/bnbnode' : 'https://bnbnode.depinonbnb.com';
 
 export function Splash() {
   return (
@@ -23,8 +26,8 @@ export function Splash() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 w-full max-w-4xl">
           {/* Node hosting */}
-          <Link
-            to="/bnbnode"
+          <a
+            href={NODE_HOSTING_URL}
             className="group relative rounded-2xl border border-border bg-card/60 backdrop-blur p-6 sm:p-8 flex flex-col transition-all hover:border-primary/60 hover:bg-card"
           >
             <div className="w-12 h-12 rounded-xl bg-primary/15 flex items-center justify-center mb-5">
@@ -39,7 +42,7 @@ export function Splash() {
             <span className="mt-6 inline-flex items-center gap-2 text-primary font-medium group-hover:gap-3 transition-all">
               Enter node hosting <ArrowRight className="w-4 h-4" />
             </span>
-          </Link>
+          </a>
 
           {/* AI / Plexus — not live yet */}
           <div className="relative rounded-2xl border border-border bg-card/40 backdrop-blur p-6 sm:p-8 flex flex-col">

@@ -29,6 +29,11 @@ export function AppHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentLang, setCurrentLang] = useState('en');
 
+  // On the bnbnode subdomain the node home is at "/"; on the apex/www it's at
+  // "/bnbnode" (behind the chooser).
+  const nodeHome =
+    typeof window !== 'undefined' && window.location.hostname.startsWith('bnbnode.') ? '/' : '/bnbnode';
+
   const changeLanguage = (langCode: string) => {
     // Store selected language
     localStorage.setItem('selectedLang', langCode);
@@ -114,7 +119,7 @@ export function AppHeader() {
     <header className="w-full bg-background border-b border-border">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4 sm:gap-8">
-          <Link to="/bnbnode" className="flex items-center gap-2">
+          <Link to={nodeHome} className="flex items-center gap-2">
             <div className="w-8 h-8">
               <img 
                 src="/assets/bnb-logo.ico" 
