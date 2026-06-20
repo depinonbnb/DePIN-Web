@@ -114,7 +114,7 @@ export function AppHeader() {
     <header className="w-full bg-background border-b border-border">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4 sm:gap-8">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/bnbnode" className="flex items-center gap-2">
             <div className="w-8 h-8">
               <img 
                 src="/assets/bnb-logo.ico" 
